@@ -32,20 +32,20 @@ pip install -r requirements.txt
 Edit `backend/proxmox_hosts.json` and add your Proxmox hosts:
 ```json
 [
-  {
-    "id": "host1",
-    "name": "Histugaya",
-    "host": "100.100.10.11",
-    "user": "tomioka@pam",
-    "password": "Admincontrol1"
-  },
-  {
-    "id": "host2",
-    "name": "Hutao",
-    "host": "100.100.10.16",
-    "user": "tomioka@pam",
-    "password": "Admincontrol1"
-  }
+    {
+        "id": "host1",
+        "name": "name",
+        "host": "host",
+        "user": "user",
+        "password": "password"
+    },
+    {
+        "id": "host2",
+        "name": "name",
+        "host": "host",
+        "user": "user",
+        "password": "password"
+    }
 ]
 ```
 
