@@ -1,0 +1,16 @@
+[
+    {
+        "id": "host1",
+        "name": "name",
+        "host": "host",
+        "user": "user",
+        "password": "password"
+    },
+    {
+        "id": "host2",
+        "name": "name",
+        "host": "host",
+        "user": "user",
+        "password": "password"
+    }
+]

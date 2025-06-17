@@ -252,7 +252,7 @@
         <div class="header">
             <h1>Proxmox Infrastructure Dashboard</h1>
         </div>
-
+        
         <div class="search-bar">
             <input type="text" class="search-input" placeholder="Search VMs, containers, or nodes..." id="searchInput">
         </div>
@@ -279,10 +279,9 @@
         <div class="content-grid">
             <div class="servers-panel">
                 <h2 class="panel-title">Nodes</h2>
-                <button id="clearNodeSelectionBtn" style="margin-bottom:10px;display:none;padding:6px 16px;border-radius:8px;border:none;background:#e9ecef;color:#495057;cursor:pointer;">Clear Node Selection</button>
                 <div id="nodesList"></div>
             </div>
-
+            
             <div class="vms-panel">
                 <h2 class="panel-title">Virtual Machines & Containers</h2>
                 <div class="filters">
@@ -297,52 +296,33 @@
 
     <script>
         const API_BASE_URL = 'http://localhost:5000/api';
-        let currentHosts = [];
         let currentNodes = [];
         let currentVMs = [];
         let currentContainers = [];
-        let selectedHostId = null;
-        let selectedNode = null;
 
-        // Fetch all hosts
-        async function fetchHosts() {
+        // Fetch all nodes
+        async function fetchNodes() {
             try {
-                const response = await fetch(`${API_BASE_URL}/hosts`);
-                const hosts = await response.json();
-                currentHosts = hosts;
-                
-                // Fetch nodes for each host
-                for (const host of hosts) {
-                    await fetchNodes(host.id);
-                }
-            } catch (error) {
-                console.error('Error fetching hosts:', error);
-            }
-        }
-
-        // Fetch nodes for a specific host
-        async function fetchNodes(hostId) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/hosts/${hostId}/nodes`);
+                const response = await fetch(`${API_BASE_URL}/nodes`);
                 const nodes = await response.json();
-                currentNodes = [...currentNodes, ...nodes];
-                displayNodes();
+                currentNodes = nodes;
+                displayNodes(nodes);
                 updateStats();
                 
                 // Fetch VMs and containers for each node
-                for (const node of nodes) {
-                    await fetchVMs(hostId, node.node);
-                    await fetchContainers(hostId, node.node);
-                }
+                nodes.forEach(node => {
+                    fetchVMs(node.node);
+                    fetchContainers(node.node);
+                });
             } catch (error) {
-                console.error(`Error fetching nodes for host ${hostId}:`, error);
+                console.error('Error fetching nodes:', error);
             }
         }
 
         // Fetch VMs for a specific node
-        async function fetchVMs(hostId, node) {
+        async function fetchVMs(node) {
             try {
-                const response = await fetch(`${API_BASE_URL}/hosts/${hostId}/nodes/${node}/vms`);
+                const response = await fetch(`${API_BASE_URL}/nodes/${node}/vms`);
                 const vms = await response.json();
                 currentVMs = [...currentVMs, ...vms];
                 displayVMs();
@@ -353,9 +333,9 @@
         }
 
         // Fetch containers for a specific node
-        async function fetchContainers(hostId, node) {
+        async function fetchContainers(node) {
             try {
-                const response = await fetch(`${API_BASE_URL}/hosts/${hostId}/nodes/${node}/containers`);
+                const response = await fetch(`${API_BASE_URL}/nodes/${node}/containers`);
                 const containers = await response.json();
                 currentContainers = [...currentContainers, ...containers];
                 displayVMs(); // This will show both VMs and containers
@@ -366,88 +346,40 @@
         }
 
         // Display nodes in the nodes panel
-        function displayNodes() {
+        function displayNodes(nodes) {
             const nodesList = document.getElementById('nodesList');
-            // Group nodes by host_id
-            const nodesByHost = {};
-            currentNodes.forEach(node => {
-                if (!nodesByHost[node.host_id]) nodesByHost[node.host_id] = [];
-                nodesByHost[node.host_id].push(node);
-            });
-            // Render all node cards (no host heading)
-            nodesList.innerHTML = currentHosts.map(host => {
-                const nodes = nodesByHost[host.id] || [];
-                if (nodes.length > 0) {
-                    return nodes.map(node => `
-                        <div class=\"server-item\" data-host=\"${node.host_id}\" data-node=\"${node.node}\">
-                            <div class=\"server-name\">${node.node}</div>
-                            <div class=\"server-info\">
-                                <div>Host: ${node.host_name}</div>
-                                <div>Status: ${node.status}</div>
-                    </div>
+            nodesList.innerHTML = nodes.map(node => `
+                <div class="server-item" data-node="${node.node}">
+                    <div class="server-name">${node.node}</div>
+                    <div class="server-info">Status: ${node.status}</div>
                 </div>
             `).join('');
-                } else {
-                    return `<div class=\"server-item\" data-host=\"${host.id}\" style=\"opacity:0.6;cursor:default;\">
-                        <div class=\"server-name\">(No nodes online)</div>
-                        <div class=\"server-info\">
-                            <div>Host: ${host.name}</div>
-                        </div>
-                    </div>`;
-                }
-            }).join('');
 
-            // Show or hide the clear button
-            document.getElementById('clearNodeSelectionBtn').style.display = (selectedHostId && selectedNode) ? 'inline-block' : 'none';
-
-            // Add click and double-click event listeners for real nodes only
-            document.querySelectorAll('.server-item[data-node]').forEach(item => {
+            // Add click event listeners
+            document.querySelectorAll('.server-item').forEach(item => {
                 item.addEventListener('click', () => {
                     document.querySelectorAll('.server-item').forEach(i => i.classList.remove('selected'));
                     item.classList.add('selected');
-                    selectedHostId = item.dataset.host;
-                    selectedNode = item.dataset.node;
-                    displayVMs();
-                    document.getElementById('clearNodeSelectionBtn').style.display = 'inline-block';
-                });
-                item.addEventListener('dblclick', () => {
-                    // Double-click to clear selection
-                    selectedHostId = null;
-                    selectedNode = null;
-                    document.querySelectorAll('.server-item').forEach(i => i.classList.remove('selected'));
-                    displayVMs();
-                    document.getElementById('clearNodeSelectionBtn').style.display = 'none';
+                    filterVMsByNode(item.dataset.node);
                 });
             });
         }
 
         // Display VMs and containers
-        function displayVMs(filteredItems) {
+        function displayVMs() {
             const vmsList = document.getElementById('vmsList');
-            let allItems = filteredItems;
-            if (!allItems) {
-                if (selectedHostId && selectedNode) {
-                    // Filter by selected node
-                    const filteredVMs = currentVMs.filter(vm => vm.host_id === selectedHostId && vm.node === selectedNode);
-                    const filteredContainers = currentContainers.filter(container => container.host_id === selectedHostId && container.node === selectedNode);
-                    allItems = [...filteredVMs, ...filteredContainers];
-                } else {
-                    // Show all
-                    allItems = [...currentVMs, ...currentContainers];
-                }
-            }
+            const allItems = [...currentVMs, ...currentContainers];
+            
             vmsList.innerHTML = allItems.map(item => `
-                <div class=\"vm-card\">
-                    <div class=\"vm-name\">${item.name}</div>
-                    <div class=\"vm-details\">
-                        <div><b>ID:</b> ${item.vmid || item.id || '-'}</div>
+                <div class="vm-card">
+                    <div class="vm-name">${item.name}</div>
+                    <div class="vm-details">
                         <div>Type: ${item.type || 'VM'}</div>
-                        <div>Host: ${item.host_name}</div>
                         <div>Node: ${item.node}</div>
-                        <div>CPU: ${item.cpus || '-'} </div>
+                        <div>CPU: ${item.cpus || '-'}</div>
                         <div>Memory: ${formatMemory(item.maxmem || 0)}</div>
                     </div>
-                    <div class=\"status ${item.status === 'running' ? 'running' : 'stopped'}\">
+                    <div class="status ${item.status === 'running' ? 'running' : 'stopped'}">
                         ${item.status || 'unknown'}
                     </div>
                 </div>
@@ -472,20 +404,24 @@
             return `${gb.toFixed(2)} GB`;
         }
 
-        // When search or filter is used, clear node selection
+        // Filter VMs by node
+        function filterVMsByNode(node) {
+            const filteredVMs = currentVMs.filter(vm => vm.node === node);
+            const filteredContainers = currentContainers.filter(container => container.node === node);
+            const allItems = [...filteredVMs, ...filteredContainers];
+            displayVMs(allItems);
+        }
+
+        // Search functionality
         document.getElementById('searchInput').addEventListener('input', (e) => {
-            selectedHostId = null;
-            selectedNode = null;
             const searchTerm = e.target.value.toLowerCase();
             const filteredVMs = currentVMs.filter(vm => 
                 vm.name.toLowerCase().includes(searchTerm) ||
-                vm.node.toLowerCase().includes(searchTerm) ||
-                vm.host_name.toLowerCase().includes(searchTerm)
+                vm.node.toLowerCase().includes(searchTerm)
             );
             const filteredContainers = currentContainers.filter(container =>
                 container.name.toLowerCase().includes(searchTerm) ||
-                container.node.toLowerCase().includes(searchTerm) ||
-                container.host_name.toLowerCase().includes(searchTerm)
+                container.node.toLowerCase().includes(searchTerm)
             );
             const allItems = [...filteredVMs, ...filteredContainers];
             displayVMs(allItems);
@@ -494,38 +430,24 @@
         // Filter buttons
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                // Do not clear node selection when filtering
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 
                 const filter = btn.dataset.filter;
-                let filteredItems;
-                if (selectedHostId && selectedNode) {
-                    // Filter only for selected node
-                    filteredItems = [...currentVMs, ...currentContainers].filter(item => item.host_id === selectedHostId && item.node === selectedNode);
-                } else {
-                    filteredItems = [...currentVMs, ...currentContainers];
-                }
+                let filteredItems = [...currentVMs, ...currentContainers];
+                
                 if (filter === 'running') {
                     filteredItems = filteredItems.filter(item => item.status === 'running');
                 } else if (filter === 'stopped') {
                     filteredItems = filteredItems.filter(item => item.status === 'stopped');
                 }
+                
                 displayVMs(filteredItems);
             });
         });
 
-        // Clear Node Selection button handler
-        document.getElementById('clearNodeSelectionBtn').addEventListener('click', () => {
-            selectedHostId = null;
-            selectedNode = null;
-            document.querySelectorAll('.server-item').forEach(i => i.classList.remove('selected'));
-            displayVMs();
-            document.getElementById('clearNodeSelectionBtn').style.display = 'none';
-        });
-
         // Initial data fetch
-        fetchHosts();
+        fetchNodes();
     </script>
 </body>
-</html>
+</html> 
