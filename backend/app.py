@@ -41,8 +41,6 @@ def get_proxmox_connection(host_config):
     except Exception as e:
         format_connection_error(host_config, e)
         return None
-        format_connection_error(host_config, e)
-        return None
 
 @app.route('/api/hosts', methods=['GET'])
 def get_hosts():
