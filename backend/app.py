@@ -126,7 +126,7 @@ def get_node_basic_info(host_id, node):
             vms = proxmox.nodes(node).qemu.get()
             basic_info['vm_count'] = len(vms)
         except Exception as e:
-            print(f"Error retrieving VMs: {e}")
+            logging.error(f"Error retrieving VMs: {e}")
             basic_info['vm_count'] = 'unknown'
         
         # Try to get containers (might work with lower permissions)
