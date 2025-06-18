@@ -28,11 +28,12 @@ def get_proxmox_connection(host_config):
         if not host_config.get('password'):
             raise ValueError("Password is not configured")
             
+        verify_ssl = host_config.get('verify_ssl', True)  # Default to True for security
         proxmox = ProxmoxAPI(
             host_config['host'],
             user=host_config['user'],
             password=host_config['password'],
-            verify_ssl=False
+            verify_ssl=verify_ssl
         )
         return proxmox
     except ValueError as e:
