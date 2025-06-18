@@ -167,14 +167,7 @@ def get_vms(host_id, node):
             vm['node'] = node
         return jsonify(vms)
     except Exception as e:
-        error_msg = str(e)
-        if "403 Forbidden" in error_msg or "Permission check failed" in error_msg:
-            return jsonify({
-                "error": "Permission denied. The user account needs VM.Audit permission.",
-                "details": "Please check your Proxmox user permissions or use a different account.",
-                "solution": "In Proxmox web interface: Datacenter > Permissions > Users > Edit user > Add VM.Audit permission"
-            }), 403
-        return jsonify({"error": error_msg}), 500
+        return handle_permission_error(e)
 
 @app.route('/api/hosts/<host_id>/nodes/<node>/containers', methods=['GET'])
 def get_containers(host_id, node):
