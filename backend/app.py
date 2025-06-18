@@ -133,14 +133,16 @@ def get_node_basic_info(host_id, node):
         try:
             vms = proxmox.nodes(node).qemu.get()
             basic_info['vm_count'] = len(vms)
-        except:
+        except Exception as e:
+            print(f"Error retrieving VMs: {e}")
             basic_info['vm_count'] = 'unknown'
         
         # Try to get containers (might work with lower permissions)
         try:
             containers = proxmox.nodes(node).lxc.get()
             basic_info['container_count'] = len(containers)
-        except:
+        except Exception as e:
+            print(f"Error retrieving containers: {e}")
             basic_info['container_count'] = 'unknown'
             
         return jsonify(basic_info)
