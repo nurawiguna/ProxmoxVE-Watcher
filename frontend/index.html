@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proxmox Infrastructure Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -12,15 +13,37 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Encode Sans';
             min-height: 100vh;
             padding: 20px;
+            /* New background: deep blue gradient with chevron overlay */
+            background: linear-gradient(135deg, #1a4a6e 0%, #0b2942 100%);
+            position: relative;
+            overflow-x: hidden;
         }
-
+        body::before {
+            content: '';
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            background: none;
+            pointer-events: none;
+            /* Large chevron/arrow shape */
+            background: 
+                linear-gradient(120deg, rgba(255,255,255,0.03) 60%, rgba(255,255,255,0.01) 100%) no-repeat,
+                url('data:image/svg+xml;utf8,<svg width="100%25" height="100%25" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 800,400 0,800" fill="%23ffffff10"/></svg>') no-repeat;
+            background-size: 120% 120%, 80% 80%;
+            background-position: 60% 40%, 60% 40%;
+            opacity: 1;
+        }
         .container {
             max-width: 1400px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
         .header {
@@ -35,6 +58,18 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
+        .header h1 i {
+            margin-right: 15px;
+            color: #FFFFFF;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
         .search-bar {
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
@@ -42,11 +77,12 @@
             padding: 20px;
             margin-bottom: 30px;
             border: 1px solid rgba(255,255,255,0.2);
+            position: relative;
         }
 
         .search-input {
             width: 100%;
-            padding: 15px 20px;
+            padding: 15px 20px 15px 50px;
             border: none;
             border-radius: 10px;
             font-size: 16px;
@@ -58,6 +94,15 @@
             outline: none;
             box-shadow: 0 0 20px rgba(255,255,255,0.3);
             transform: translateY(-2px);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 35px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #065BA8;
+            font-size: 18px;
         }
 
         .stats-grid {
@@ -75,11 +120,29 @@
             text-align: center;
             border: 1px solid rgba(255,255,255,0.2);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #FFFFFF, #FFFFFF);
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            color: #FFFFFF;
+            margin-bottom: 15px;
         }
 
         .stat-number {
@@ -111,40 +174,201 @@
             font-size: 1.5rem;
             margin-bottom: 20px;
             color: #333;
-            border-bottom: 2px solid #667eea;
+            border-bottom: 2px solid #065BA8;
             padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .panel-title i {
+            margin-right: 10px;
+            color: #065BA8;
         }
 
         .server-item {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 15px;
+            padding: 20px;
             margin-bottom: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #065BA8;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .server-item:hover {
             transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
         }
 
         .server-item.selected {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #065BA8;
             color: white;
-            border-left-color: #fff;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
         }
 
         .server-name {
             font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            color: #333;
+            position: relative;
+        }
+
+        .server-name-divider {
+            background: linear-gradient(90deg, #e0e7ef 0%, #90caf9 100%);
+            border-radius: 8px;
+            margin: 18px auto 18px auto;
+            opacity: 0.9;
+            box-shadow: 0 2px 8px 0 rgba(6,91,168,0.08);
+            transition: background 0.3s;
+        }
+
+        .server-item.selected .server-name-divider {
+            background: linear-gradient(90deg, #fff 0%, #90caf9 100%);
+            opacity: 1;
+        }
+
+        .server-name i {
+            margin-right: 10px;
+            font-size: 1rem;
+            color: #065BA8;
+        }
+
+        .server-item.selected .server-name i {
+            color: #FFFFFF;
         }
 
         .server-info {
             font-size: 0.9rem;
-            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .server-item.selected .server-info {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .server-info-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 6px 0;
+        }
+
+        .server-info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .server-info-row i {
+            width: 20px;
+            margin-right: 10px;
+            font-size: 0.9rem;
+            color: #065BA8;
+            text-align: center;
+        }
+
+        .server-item.selected .server-info-row i {
+            color: #FFFFFF;
+        }
+
+        .server-info-label {
+            font-weight: 500;
+            margin-right: 8px;
+            min-width: 60px;
+        }
+
+        .server-info-value {
+            color: #666;
+            font-weight: 400;
+        }
+
+        .server-item.selected .server-info-value {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .status-indicator.online {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+
+        .status-indicator.offline {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        .server-item.selected .status-indicator.online {
+            background: #28a745;
+            color: #fff;
+            border: 1px solid #28a745;
+        }
+
+        .server-item.selected .status-indicator.offline {
+            background: #dc3545;
+            color: #fff;
+            border: 1px solid #dc3545;
+        }
+
+        .status-indicator i {
+            margin-right: 4px;
+            font-size: 0.7rem;
+        }
+
+        .node-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+
+        .detail-item i {
+            width: 16px;
+            margin-right: 6px;
+            color: #065BA8;
+            font-size: 0.8rem;
+        }
+
+        .server-item.selected .detail-item i {
+            color: #ffd700;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            margin-right: 4px;
+            color: #555;
+        }
+
+        .server-item.selected .detail-label {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .detail-value {
+            color: #666;
+            font-weight: 400;
+        }
+
+        .server-item.selected .detail-value {
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .vm-grid {
@@ -175,7 +399,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #065BA8 0%, #764ba2 100%);
         }
 
         .vm-name {
@@ -183,12 +407,31 @@
             font-size: 1.1rem;
             margin-bottom: 10px;
             color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .vm-name i {
+            margin-right: 8px;
+            color: #065BA8;
         }
 
         .vm-details {
             font-size: 0.9rem;
             color: #666;
             line-height: 1.5;
+        }
+
+        .vm-details div {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .vm-details i {
+            width: 16px;
+            margin-right: 8px;
+            color: #065BA8;
         }
 
         .status {
@@ -198,6 +441,13 @@
             font-size: 0.8rem;
             font-weight: bold;
             margin-top: 10px;
+            display: flex;
+            align-items: center;
+            width: fit-content;
+        }
+
+        .status i {
+            margin-right: 5px;
         }
 
         .status.running {
@@ -225,11 +475,49 @@
             color: #495057;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .filter-btn i {
+            margin-right: 5px;
         }
 
         .filter-btn.active {
-            background: #667eea;
+            background: #065BA8;
             color: white;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        #clearNodeSelectionBtn {
+            margin-bottom: 10px;
+            display: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            background: #e9ecef;
+            color: #495057;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        #clearNodeSelectionBtn i {
+            margin-right: 5px;
+        }
+
+        #clearNodeSelectionBtn:hover {
+            background: #065BA8;
+            color: white;
+        }
+
+        .server-item.selected .server-name {
+            color: #fff !important;
         }
 
         @media (max-width: 768px) {
@@ -250,45 +538,83 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Proxmox Infrastructure Dashboard</h1>
+            <h1><i class="fas fa-server"></i>Proxmox Infrastructure Dashboard</h1>
+            <p>Manage and locate your VMs across baremetal servers.</p>
         </div>
 
         <div class="search-bar">
-            <input type="text" class="search-input" placeholder="Search VMs, containers, or nodes..." id="searchInput">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Search VMs, containers..." id="searchInput">
         </div>
 
-        <div class="stats-grid">
+        <!-- Add Show Summary button above stats-grid -->
+        <button id="toggleStatsBtn" style="margin-bottom:18px;padding:10px 28px;font-size:1.1rem;border-radius:10px;border:none;background:#065BA8;color:#fff;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(6,91,168,0.08);">Show Summary</button>
+        <div class="stats-grid" id="statsGrid" style="display:none;">
             <div class="stat-card">
+                <i class="fas fa-network-wired stat-icon"></i>
                 <div class="stat-number" id="totalNodes">-</div>
-                <div class="stat-label">Total Nodes</div>
+                <div class="stat-label">Total Baremetal</div>
             </div>
             <div class="stat-card">
+                <i class="fas fa-desktop stat-icon"></i>
                 <div class="stat-number" id="totalVMs">-</div>
-                <div class="stat-label">Total VMs</div>
+                <div class="stat-label">Total VM's</div>
             </div>
             <div class="stat-card">
+                <i class="fas fa-play stat-icon"></i>
+                <div class="stat-number" id="totalVMsRunning">-</div>
+                <div class="stat-label">Total VM's Running</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-stop stat-icon"></i>
+                <div class="stat-number" id="totalVMsStopped">-</div>
+                <div class="stat-label">Total VM's Stopped</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-cube stat-icon"></i>
                 <div class="stat-number" id="totalContainers">-</div>
                 <div class="stat-label">Total Containers</div>
             </div>
             <div class="stat-card">
+                <i class="fas fa-play-circle stat-icon"></i>
+                <div class="stat-number" id="totalContainersRunning">-</div>
+                <div class="stat-label">Total Containers Running</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-stop-circle stat-icon"></i>
+                <div class="stat-number" id="totalContainersStopped">-</div>
+                <div class="stat-label">Total Containers Stopped</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-memory stat-icon"></i>
+                <div class="stat-number" id="totalRAM">-</div>
+                <div class="stat-label">Total RAM Usage</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-microchip stat-icon"></i>
                 <div class="stat-number" id="totalCPU">-</div>
                 <div class="stat-label">Total CPU Usage</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-hdd stat-icon"></i>
+                <div class="stat-number" id="totalDisk">-</div>
+                <div class="stat-label">Total Disk Usage</div>
             </div>
         </div>
 
         <div class="content-grid">
             <div class="servers-panel">
-                <h2 class="panel-title">Baremetal Servers</h2>
-                <button id="clearNodeSelectionBtn" style="margin-bottom:10px;display:none;padding:6px 16px;border-radius:8px;border:none;background:#e9ecef;color:#495057;cursor:pointer;">Clear Node Selection</button>
+                <h2 class="panel-title"><i class="fas fa-server"></i>Baremetal Servers</h2>
+                <button id="clearNodeSelectionBtn"><i class="fas fa-times"></i>Clear Node Selection</button>
                 <div id="nodesList"></div>
             </div>
 
             <div class="vms-panel">
-                <h2 class="panel-title">Virtual Machines & Containers</h2>
+                <h2 class="panel-title"><i class="fas fa-layer-group"></i>Virtual Machines & Containers</h2>
                 <div class="filters">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="running">Running</button>
-                    <button class="filter-btn" data-filter="stopped">Stopped</button>
+                    <button class="filter-btn active" data-filter="all"><i class="fas fa-list"></i>All</button>
+                    <button class="filter-btn" data-filter="running"><i class="fas fa-play"></i>Running</button>
+                    <button class="filter-btn" data-filter="stopped"><i class="fas fa-stop"></i>Stopped</button>
                 </div>
                 <div id="vmsList" class="vm-grid"></div>
             </div>
@@ -303,6 +629,8 @@
         let currentContainers = [];
         let selectedHostId = null;
         let selectedNode = null;
+        let nodeStatusData = {}; // Store detailed node status information
+        let expandedNodes = {};
 
         // Fetch all hosts
         async function fetchHosts() {
@@ -326,6 +654,12 @@
                 const response = await fetch(`${API_BASE_URL}/hosts/${hostId}/nodes`);
                 const nodes = await response.json();
                 currentNodes = [...currentNodes, ...nodes];
+                
+                // Fetch detailed status for each node
+                for (const node of nodes) {
+                    await fetchNodeStatus(hostId, node.node);
+                }
+                
                 displayNodes();
                 updateStats();
                 
@@ -336,6 +670,23 @@
                 }
             } catch (error) {
                 console.error(`Error fetching nodes for host ${hostId}:`, error);
+            }
+        }
+
+        // Fetch detailed node status
+        async function fetchNodeStatus(hostId, node) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/hosts/${hostId}/nodes/${node}/status`);
+                const status = await response.json();
+                nodeStatusData[`${hostId}-${node}`] = status;
+                displayNodes(); // Refresh display with new data
+            } catch (error) {
+                console.error(`Error fetching status for node ${node}:`, error);
+                // Store basic info if status fetch fails
+                nodeStatusData[`${hostId}-${node}`] = {
+                    status: 'error',
+                    error: error.message
+                };
             }
         }
 
@@ -378,27 +729,91 @@
             nodesList.innerHTML = currentHosts.map(host => {
                 const nodes = nodesByHost[host.id] || [];
                 if (nodes.length > 0) {
-                    return nodes.map(node => `
-                        <div class=\"server-item\" data-host=\"${node.host_id}\" data-node=\"${node.node}\">
-                            <div class=\"server-name\">${node.node}</div>
-                            <div class=\"server-info\">
-                                <div>Host: ${node.host_name}</div>
-                                <div>Status: ${node.status}</div>
-                    </div>
-                </div>
-            `).join('');
+                    return nodes.map(node => {
+                        const statusKey = `${node.host_id}-${node.node}`;
+                        const statusData = nodeStatusData[statusKey];
+                        const isExpanded = expandedNodes[statusKey];
+                        const totalCores = statusData && statusData.cpuinfo ? statusData.cpuinfo.cpus : '-';
+                        const totalMemory = statusData && statusData.memory ? formatMemory(statusData.memory.total) : '-';
+                        const statusOnline = statusData?.status === 'online' || statusData?.host_id;
+                        return `
+                            <div class="server-item simple-card" data-host="${node.host_id}" data-node="${node.node}" style="margin-bottom:12px;padding:14px 16px 10px 16px;">
+                                <div class="server-name" style="font-size:1.12rem;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                                        <i class="fas fa-server" style="font-size:1.2rem;"></i>${node.node}
+                                </div>
+                                <div class="server-name-divider"></div>
+                                <div class="baremetal-summary-row" style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:2px;">
+                                    <div style="display:flex;align-items:center;gap:5px;font-size:0.98rem;">
+                                        <i class="fas fa-globe"></i>
+                                        <span>${statusData?.host_id ? host.host : 'N/A'}</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:5px;font-size:0.98rem;">
+                                        <i class="fas fa-microchip"></i>
+                                        <span>${totalCores} cores</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:5px;font-size:0.98rem;">
+                                        <i class="fas fa-memory"></i>
+                                        <span>${totalMemory}</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:5px;font-size:0.98rem;">
+                                        <span class="status-indicator ${statusOnline ? 'online' : 'offline'}" style="padding:2px 10px;border-radius:10px;font-weight:600;background:${statusOnline ? 'rgba(40,167,69,0.12)' : 'rgba(220,53,69,0.12)'};color:${statusOnline ? '#28a745' : '#dc3545'};border:1px solid ${statusOnline ? 'rgba(40,167,69,0.3)' : 'rgba(220,53,69,0.3)'};">
+                                            <i class="fas ${statusOnline ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                                            ${statusOnline ? 'online' : 'offline'}
+                                        </span>
+                                    </div>
+                                </div>
+                                <button class="show-more-btn" data-statuskey="${statusKey}" style="margin-top:4px;margin-bottom:2px;padding:2px 14px;font-size:0.95rem;border-radius:8px;border:none;background:#e9ecef;color:#495057;cursor:pointer;transition:all 0.2s;float:right;">
+                                    ${isExpanded ? 'Show Less' : 'Show More'}
+                                </button>
+                                <div style="clear:both;"></div>
+                                ${isExpanded && statusData ? `
+                                    <div class="baremetal-details" style="margin-top:8px;padding-top:8px;border-top:1px solid #e0e0e0;">
+                                        ${statusData.cpuinfo ? `
+                                            <div class="server-info-row" style="font-size:0.97rem;margin-bottom:2px;"><i class="fas fa-microchip"></i><span class="server-info-label">CPU:</span><span class="server-info-value">${statusData.cpuinfo.model}</span></div>
+                                        ` : ''}
+                                        ${statusData.loadavg ? `
+                                            <div class="server-info-row" style="font-size:0.97rem;margin-bottom:2px;"><i class="fas fa-chart-line"></i><span class="server-info-label">Load:</span><span class="server-info-value">${statusData.loadavg.join(', ')}</span></div>
+                                        ` : ''}
+                                        ${statusData.rootfs ? `
+                                            <div class="server-info-row" style="font-size:0.97rem;margin-bottom:2px;"><i class="fas fa-hdd"></i><span class="server-info-label">Storage:</span><span class="server-info-value">${formatStorage(statusData.rootfs.total)} (${formatStorage(statusData.rootfs.used)} used)</span></div>
+                                        ` : ''}
+                                        ${statusData.uptime ? `
+                                            <div class="server-info-row" style="font-size:0.97rem;margin-bottom:2px;"><i class="fas fa-clock"></i><span class="server-info-label">Uptime:</span><span class="server-info-value">${formatUptime(statusData.uptime)}</span></div>
+                                        ` : ''}
+                                        ${statusData.pveversion ? `
+                                            <div class="server-info-row" style="font-size:0.97rem;margin-bottom:2px;"><i class="fas fa-code-branch"></i><span class="server-info-label">Proxmox:</span><span class="server-info-value">${statusData.pveversion}</span></div>
+                                        ` : ''}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    }).join('');
                 } else {
-                    return `<div class=\"server-item\" data-host=\"${host.id}\" style=\"opacity:0.6;cursor:default;\">
-                        <div class=\"server-name\">(No nodes online)</div>
-                        <div class=\"server-info\">
-                            <div>Host: ${host.name}</div>
+                    return `<div class="server-item simple-card" data-host="${host.id}" style="opacity:0.6;cursor:default;">
+                        <div class="server-name">
+                            <i class="fas fa-exclamation-triangle"></i>(No nodes online)
+                        </div>
+                        <div class="server-info">
+                            <div class="server-info-row">
+                                <i class="fas fa-server"></i>
+                                <span class="server-info-label">Host:</span>
+                                <span class="server-info-value">${host.name}</span>
+                            </div>
+                            <div class="server-info-row">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span class="server-info-label">Status:</span>
+                                <span class="status-indicator offline">
+                                    <i class="fas fa-times-circle"></i>
+                                    Offline
+                                </span>
+                            </div>
                         </div>
                     </div>`;
                 }
             }).join('');
 
             // Show or hide the clear button
-            document.getElementById('clearNodeSelectionBtn').style.display = (selectedHostId && selectedNode) ? 'inline-block' : 'none';
+            document.getElementById('clearNodeSelectionBtn').style.display = (selectedHostId && selectedNode) ? 'inline-flex' : 'none';
 
             // Add click and double-click event listeners for real nodes only
             document.querySelectorAll('.server-item[data-node]').forEach(item => {
@@ -408,7 +823,7 @@
                     selectedHostId = item.dataset.host;
                     selectedNode = item.dataset.node;
                     displayVMs();
-                    document.getElementById('clearNodeSelectionBtn').style.display = 'inline-block';
+                    document.getElementById('clearNodeSelectionBtn').style.display = 'inline-flex';
                 });
                 item.addEventListener('dblclick', () => {
                     // Double-click to clear selection
@@ -417,6 +832,15 @@
                     document.querySelectorAll('.server-item').forEach(i => i.classList.remove('selected'));
                     displayVMs();
                     document.getElementById('clearNodeSelectionBtn').style.display = 'none';
+                });
+            });
+
+            // Add show more/less button listeners
+            document.querySelectorAll('.show-more-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const key = btn.getAttribute('data-statuskey');
+                    expandedNodes[key] = !expandedNodes[key];
+                    displayNodes();
                 });
             });
         }
@@ -436,17 +860,23 @@
                     allItems = [...currentVMs, ...currentContainers];
                 }
             }
-            vmsList.innerHTML = allItems.map(item => `
-                <div class=\"vm-card\">
-                    <div class=\"vm-name\">${item.name}</div>
-                    <div class=\"vm-details\">
-                        <div><b>ID:</b> ${item.vmid || item.id || '-'}</div>
-                        <div>Type: ${item.type || 'VM'}</div>
-                        <div>Baremetal: ${item.host_name}</div>
-                        <div>Resource: ${formatMemory(item.maxmem || 0)} RAM,  ${item.cpus || '-'} cores</div>
+            
+            // Sort items by name in ascending order
+            const sortedItems = allItems.sort((a, b) => a.name.localeCompare(b.name));
+            
+            vmsList.innerHTML = sortedItems.map(item => `
+                <div class="vm-card">
+                    <div class="vm-name">
+                        <i class="${item.type === 'lxc' ? 'fas fa-cube' : 'fas fa-desktop'}"></i>${item.name}
                     </div>
-                    <div class=\"status ${item.status === 'running' ? 'running' : 'stopped'}\">
-                        ${item.status || 'unknown'}
+                    <div class="vm-details">
+                        <div><i class="fas fa-hashtag"></i><b>ID:</b> ${item.vmid || item.id || '-'}</div>
+                        <div><i class="fas fa-tag"></i>Type: ${item.type || 'VM'}</div>
+                        <div><i class="fas fa-server"></i>Baremetal: ${item.host_name}</div>
+                        <div><i class="fas fa-microchip"></i>Resource: ${formatMemory(item.maxmem || 0)} RAM, ${item.cpus || '-'} cores, ${item.maxdisk !== undefined ? `${formatStorage(item.maxdisk)}` : ''} DISK</div>
+                    </div>
+                    <div class="status ${item.status === 'running' ? 'running' : 'stopped'}">
+                        <i class="fas ${item.status === 'running' ? 'fa-play' : 'fa-stop'}"></i>${item.status || 'unknown'}
                     </div>
                 </div>
             `).join('');
@@ -457,17 +887,61 @@
             document.getElementById('totalNodes').textContent = currentNodes.length;
             document.getElementById('totalVMs').textContent = currentVMs.length;
             document.getElementById('totalContainers').textContent = currentContainers.length;
-            
-            // Calculate total CPU usage
-            const totalCPU = currentVMs.reduce((sum, vm) => sum + (vm.cpus || 0), 0) +
-                           currentContainers.reduce((sum, container) => sum + (container.cpus || 0), 0);
+
+            // Running VMs and Containers
+            const runningVMs = currentVMs.filter(vm => vm.status === 'running');
+            const runningContainers = currentContainers.filter(c => c.status === 'running');
+            document.getElementById('totalVMsRunning').textContent = runningVMs.length;
+            document.getElementById('totalContainersRunning').textContent = runningContainers.length;
+
+            // Stopped VMs and Containers
+            const stoppedVMs = currentVMs.filter(vm => vm.status !== 'running');
+            const stoppedContainers = currentContainers.filter(c => c.status !== 'running');
+            document.getElementById('totalVMsStopped').textContent = stoppedVMs.length;
+            document.getElementById('totalContainersStopped').textContent = stoppedContainers.length;
+
+            // RAM Usage (sum of maxmem for running VMs and containers)
+            const totalRAM = runningVMs.reduce((sum, vm) => sum + (vm.maxmem || 0), 0) +
+                             runningContainers.reduce((sum, c) => sum + (c.maxmem || 0), 0);
+            document.getElementById('totalRAM').textContent = formatMemory(totalRAM);
+
+            // CPU Usage (sum of cpus for running VMs and containers)
+            const totalCPU = runningVMs.reduce((sum, vm) => sum + (vm.cpus || 0), 0) +
+                             runningContainers.reduce((sum, c) => sum + (c.cpus || 0), 0);
             document.getElementById('totalCPU').textContent = totalCPU;
+
+            // Disk Usage (sum of maxdisk for running VMs and containers)
+            const totalDisk = runningVMs.reduce((sum, vm) => sum + (vm.maxdisk || 0), 0) +
+                              runningContainers.reduce((sum, c) => sum + (c.maxdisk || 0), 0);
+            document.getElementById('totalDisk').textContent = formatStorage(totalDisk);
         }
 
         // Format memory size
         function formatMemory(bytes) {
             const gb = bytes / (1024 * 1024 * 1024);
-            return `${gb.toFixed(2)} GB`;
+            return `${gb.toFixed(2)}GB`;
+        }
+
+        // Format storage size
+        function formatStorage(bytes) {
+            if (!bytes || bytes === 0) return 'N/A';
+            const gb = bytes / (1024 * 1024 * 1024);
+            return `${gb.toFixed(2)}GB`;
+        }
+
+        // Format uptime
+        function formatUptime(seconds) {
+            const days = Math.floor(seconds / 86400);
+            const hours = Math.floor((seconds % 86400) / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            
+            if (days > 0) {
+                return `${days}d ${hours}h ${minutes}m`;
+            } else if (hours > 0) {
+                return `${hours}h ${minutes}m`;
+            } else {
+                return `${minutes}m`;
+            }
         }
 
         // When search or filter is used, clear node selection
@@ -520,6 +994,19 @@
             document.querySelectorAll('.server-item').forEach(i => i.classList.remove('selected'));
             displayVMs();
             document.getElementById('clearNodeSelectionBtn').style.display = 'none';
+        });
+
+        // Toggle stats-grid visibility
+        const toggleStatsBtn = document.getElementById('toggleStatsBtn');
+        const statsGrid = document.getElementById('statsGrid');
+        toggleStatsBtn.addEventListener('click', () => {
+            if (statsGrid.style.display === 'none') {
+                statsGrid.style.display = 'grid';
+                toggleStatsBtn.textContent = 'Hide Summary';
+            } else {
+                statsGrid.style.display = 'none';
+                toggleStatsBtn.textContent = 'Show Summary';
+            }
         });
 
         // Initial data fetch
