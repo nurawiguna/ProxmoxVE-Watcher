@@ -134,7 +134,7 @@ def get_node_basic_info(host_id, node):
             containers = proxmox.nodes(node).lxc.get()
             basic_info['container_count'] = len(containers)
         except Exception as e:
-            print(f"Error retrieving containers: {e}")
+            logging.error(f"Error retrieving containers: {e}")
             basic_info['container_count'] = 'unknown'
             
         return jsonify(basic_info)
