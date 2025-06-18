@@ -18,7 +18,7 @@ A modern dashboard to monitor multiple Proxmox hosts, nodes, VMs, and containers
 
 ### 1. Clone the Repository
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/nurawiguna/proxmox_dashboard.git
 cd proxmox_dashboard
 ```
 

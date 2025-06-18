@@ -1,13 +1,13 @@
 [
     {
-        "id": "host1",
+        "id": "1",
         "name": "name",
         "host": "host",
         "user": "user",
         "password": "password"
     },
     {
-        "id": "host2",
+        "id": "2",
         "name": "name",
         "host": "host",
         "user": "user",
