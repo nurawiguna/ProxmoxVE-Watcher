@@ -102,7 +102,7 @@ python3 -m http.server 8000
 ---
 
 ## Screenshot
-![Dashboard Screenshot](screenshot.png)
+![Dashboard Screenshot](ss.png)
 
 ---
 
