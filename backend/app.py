@@ -37,7 +37,7 @@ def get_proxmox_connection(host_config):
         )
         return proxmox
     except ValueError as e:
-        print(f"Configuration error for host {host_config.get('name', 'Unknown')}: {str(e)}")
+        logging.error(f"Configuration error for host {host_config.get('name', 'Unknown')}: {str(e)}")
         return None
     except Exception as e:
         format_connection_error(host_config, e)
