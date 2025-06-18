@@ -68,12 +68,9 @@ def get_nodes(host_id):
         return jsonify(nodes)
     except Exception as e:
         error_msg = str(e)
-        if "403 Forbidden" in error_msg or "Permission check failed" in error_msg:
-            return jsonify({
-                "error": "Permission denied. The user account needs Sys.Audit permission.",
-                "details": "Please check your Proxmox user permissions or use a different account.",
-                "solution": "In Proxmox web interface: Datacenter > Permissions > Users > Edit user > Add Sys.Audit permission"
-            }), 403
+        permission_error_response = handle_permission_error(error_msg)
+        if permission_error_response:
+            return permission_error_response
         return jsonify({"error": error_msg}), 500
 
 @app.route('/api/hosts/<host_id>/nodes/<node>/status', methods=['GET'])
