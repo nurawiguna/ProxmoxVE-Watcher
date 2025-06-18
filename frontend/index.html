@@ -278,7 +278,7 @@
 
         <div class="content-grid">
             <div class="servers-panel">
-                <h2 class="panel-title">Nodes</h2>
+                <h2 class="panel-title">Baremetal Servers</h2>
                 <button id="clearNodeSelectionBtn" style="margin-bottom:10px;display:none;padding:6px 16px;border-radius:8px;border:none;background:#e9ecef;color:#495057;cursor:pointer;">Clear Node Selection</button>
                 <div id="nodesList"></div>
             </div>
@@ -442,10 +442,8 @@
                     <div class=\"vm-details\">
                         <div><b>ID:</b> ${item.vmid || item.id || '-'}</div>
                         <div>Type: ${item.type || 'VM'}</div>
-                        <div>Host: ${item.host_name}</div>
-                        <div>Node: ${item.node}</div>
-                        <div>CPU: ${item.cpus || '-'} </div>
-                        <div>Memory: ${formatMemory(item.maxmem || 0)}</div>
+                        <div>Baremetal: ${item.host_name}</div>
+                        <div>Resource: ${formatMemory(item.maxmem || 0)} RAM,  ${item.cpus || '-'} cores</div>
                     </div>
                     <div class=\"status ${item.status === 'running' ? 'running' : 'stopped'}\">
                         ${item.status || 'unknown'}
