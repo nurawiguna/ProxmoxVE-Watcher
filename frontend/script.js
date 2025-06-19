@@ -372,5 +372,32 @@ toggleStatsBtn.addEventListener('click', () => {
     }
 });
 
+// VM List toggle logic
+const vmsList = document.getElementById('vmsList');
+const filters = document.querySelector('.filters');
+const toggleVmListBtn = document.getElementById('toggleVmListBtn');
+let vmListVisible = false;
+
+function setVmListVisibility(visible) {
+    vmListVisible = visible;
+    vmsList.style.display = visible ? '' : 'none';
+    filters.style.display = visible ? '' : 'none';
+    toggleVmListBtn.textContent = visible ? 'Hide VM List' : 'Show VM List';
+}
+
+// Hide VM list by default
+setVmListVisibility(false);
+
+toggleVmListBtn.addEventListener('click', () => {
+    setVmListVisibility(!vmListVisible);
+});
+
+// Show VM list when searching
+const searchInput = document.getElementById('searchInput');
+searchInput.addEventListener('input', (e) => {
+    setVmListVisibility(true);
+    // ... existing code for search ...
+});
+
 // Initial data fetch
 fetchHosts(); 
