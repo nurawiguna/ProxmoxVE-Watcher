@@ -39,9 +39,15 @@ def get_proxmox_connection(host_config):
         print(f"Configuration error for host {host_config.get('name', 'Unknown')}: {str(e)}")
         return None
     except Exception as e:
-        format_connection_error(host_config, e)
-        return None
-        format_connection_error(host_config, e)
+        error_msg = str(e)
+        if "hostname lookup" in error_msg or "Name or service not known" in error_msg:
+            print(f"Hostname resolution failed for {host_config['host']}. Please check the host address in proxmox_hosts.json")
+        elif "Connection refused" in error_msg:
+            print(f"Connection refused to {host_config['host']}. Please check if Proxmox is running and accessible")
+        elif "timeout" in error_msg.lower():
+            print(f"Connection timeout to {host_config['host']}. Please check network connectivity")
+        else:
+            print(f"Error connecting to Proxmox host {host_config['host']}: {error_msg}")
         return None
 
 @app.route('/api/hosts', methods=['GET'])
