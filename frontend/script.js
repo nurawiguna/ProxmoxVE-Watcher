@@ -120,6 +120,14 @@ function displayNodes() {
                                 <span>${statusData?.host_id ? host.host : 'N/A'}</span>
                             </div>
                             <div style="display:flex;align-items:center;gap:5px;font-size:0.98rem;">
+                                <i class="fas fa-building"></i>
+                                <span>${host.company || '-'}</span>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:5px;font-size:0.98rem;">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>${host.site || '-'}</span>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:5px;font-size:0.98rem;">
                                 <i class="fas fa-microchip"></i>
                                 <span>${totalCores} cores</span>
                             </div>
@@ -170,6 +178,16 @@ function displayNodes() {
                         <i class="fas fa-server"></i>
                         <span class="server-info-label">Host:</span>
                         <span class="server-info-value">${host.name}</span>
+                    </div>
+                    <div class="server-info-row">
+                        <i class="fas fa-building"></i>
+                        <span class="server-info-label">Company:</span>
+                        <span class="server-info-value">${host.company || '-'}</span>
+                    </div>
+                    <div class="server-info-row">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span class="server-info-label">Site:</span>
+                        <span class="server-info-value">${host.site || '-'}</span>
                     </div>
                     <div class="server-info-row">
                         <i class="fas fa-exclamation-circle"></i>
