@@ -5,7 +5,9 @@
         "host": "proxmox_host_1_ip",
         "user": "user@pve",
         "password": "password",
-        "verify_ssl": false
+        "verify_ssl": false,
+        "company": "company_name",
+        "site": "site_name"
         
     },
     {
@@ -14,6 +16,8 @@
         "host": "proxmox_host_2_ip",
         "user": "user@pve",
         "password": "password",
-        "verify_ssl": false
+        "verify_ssl": false,
+        "company": "company_name",
+        "site": "site_name"
     }
 ]
