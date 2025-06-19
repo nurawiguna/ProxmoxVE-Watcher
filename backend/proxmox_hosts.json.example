@@ -1,16 +1,19 @@
 [
     {
         "id": "1",
-        "name": "name",
-        "host": "host",
-        "user": "user",
-        "password": "password"
+        "name": "proxmox_host_1",
+        "host": "proxmox_host_1_ip",
+        "user": "user@pve",
+        "password": "password",
+        "verify_ssl": false
+        
     },
     {
         "id": "2",
-        "name": "name",
-        "host": "host",
-        "user": "user",
-        "password": "password"
+        "name": "proxmox_host_2",
+        "host": "proxmox_host_2_ip",
+        "user": "user@pve",
+        "password": "password",
+        "verify_ssl": false
     }
 ]
