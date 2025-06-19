@@ -28,15 +28,16 @@ def get_proxmox_connection(host_config):
         if not host_config.get('password'):
             raise ValueError("Password is not configured")
             
+        verify_ssl = host_config.get('verify_ssl', True)  # Default to True for security
         proxmox = ProxmoxAPI(
             host_config['host'],
             user=host_config['user'],
             password=host_config['password'],
-            verify_ssl=False
+            verify_ssl=verify_ssl
         )
         return proxmox
     except ValueError as e:
-        print(f"Configuration error for host {host_config.get('name', 'Unknown')}: {str(e)}")
+        logging.error(f"Configuration error for host {host_config.get('name', 'Unknown')}: {str(e)}")
         return None
     except Exception as e:
         error_msg = str(e)
@@ -76,12 +77,9 @@ def get_nodes(host_id):
         return jsonify(nodes)
     except Exception as e:
         error_msg = str(e)
-        if "403 Forbidden" in error_msg or "Permission check failed" in error_msg:
-            return jsonify({
-                "error": "Permission denied. The user account needs Sys.Audit permission.",
-                "details": "Please check your Proxmox user permissions or use a different account.",
-                "solution": "In Proxmox web interface: Datacenter > Permissions > Users > Edit user > Add Sys.Audit permission"
-            }), 403
+        permission_error_response = handle_permission_error(error_msg)
+        if permission_error_response:
+            return permission_error_response
         return jsonify({"error": error_msg}), 500
 
 @app.route('/api/hosts/<host_id>/nodes/<node>/status', methods=['GET'])
@@ -103,12 +101,9 @@ def get_node_status(host_id, node):
         return jsonify(status)
     except Exception as e:
         error_msg = str(e)
-        if "403 Forbidden" in error_msg or "Permission check failed" in error_msg:
-            return jsonify({
-                "error": "Permission denied. The user account needs Sys.Audit permission.",
-                "details": "Please check your Proxmox user permissions or use a different account.",
-                "solution": "In Proxmox web interface: Datacenter > Permissions > Users > Edit user > Add Sys.Audit permission"
-            }), 403
+        permission_error_response = handle_permission_error(error_msg)
+        if permission_error_response:
+            return permission_error_response
         return jsonify({"error": error_msg}), 500
 
 @app.route('/api/hosts/<host_id>/nodes/<node>/basic-info', methods=['GET'])
@@ -139,14 +134,16 @@ def get_node_basic_info(host_id, node):
         try:
             vms = proxmox.nodes(node).qemu.get()
             basic_info['vm_count'] = len(vms)
-        except:
+        except Exception as e:
+            logging.error(f"Error retrieving VMs: {e}")
             basic_info['vm_count'] = 'unknown'
         
         # Try to get containers (might work with lower permissions)
         try:
             containers = proxmox.nodes(node).lxc.get()
             basic_info['container_count'] = len(containers)
-        except:
+        except Exception as e:
+            logging.error(f"Error retrieving containers: {e}")
             basic_info['container_count'] = 'unknown'
             
         return jsonify(basic_info)
@@ -178,14 +175,7 @@ def get_vms(host_id, node):
             vm['node'] = node
         return jsonify(vms)
     except Exception as e:
-        error_msg = str(e)
-        if "403 Forbidden" in error_msg or "Permission check failed" in error_msg:
-            return jsonify({
-                "error": "Permission denied. The user account needs VM.Audit permission.",
-                "details": "Please check your Proxmox user permissions or use a different account.",
-                "solution": "In Proxmox web interface: Datacenter > Permissions > Users > Edit user > Add VM.Audit permission"
-            }), 403
-        return jsonify({"error": error_msg}), 500
+        return handle_permission_error(e)
 
 @app.route('/api/hosts/<host_id>/nodes/<node>/containers', methods=['GET'])
 def get_containers(host_id, node):
