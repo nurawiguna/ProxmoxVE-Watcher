@@ -1,6 +1,19 @@
 # Proxmox Dashboard
+Manage and locate your VMs across baremetal servers.
 
-A modern, easy-to-use dashboard for monitoring multiple Proxmox hosts, nodes, VMs, and containers in real time.
+
+
+## Requirements
+- **Python 3.10+** (tested on 3.10.0)
+- **pip** (Python package manager)
+- **Python packages:**
+  - Flask (2.0.1 or newer)
+  - Flask-CORS (3.0.10 or newer)
+  - proxmoxer (1.3.1 or newer)
+  - python-dotenv (0.19.0 or newer)
+- **Frontend static server:**
+  - Python's built-in HTTP server (`python3 -m http.server`) is supported and available
+  - (Optional) Node.js (v20.5.0 or newer) if you want to use other static servers
 
 ---
 
