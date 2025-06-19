@@ -40,7 +40,7 @@ def get_proxmox_connection(host_config):
         logging.error(f"Configuration error for host {host_config.get('name', 'Unknown')}: {str(e)}")
         return None
     except Exception as e:
-        format_connection_error(host_config, e)
+        logging.error(f"Connection error for host {host_config.get('name', 'Unknown')}: {str(e)}")
         return None
 
 @app.route('/api/hosts', methods=['GET'])

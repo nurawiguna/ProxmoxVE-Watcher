@@ -1,8 +1,6 @@
 # Proxmox Dashboard
 Manage and locate your VMs across baremetal servers.
 
-
-
 ## Requirements
 - **Python 3.10+** (tested on 3.10.0)
 - **pip** (Python package manager)
@@ -56,18 +54,21 @@ Edit `backend/proxmox_hosts.json` and add your Proxmox hosts. Example:
         "name": "Your Proxmox Host",
         "host": "your_proxmox_host_ip",
         "user": "api-user@pve",
-        "password": "your_password"
+        "password": "your_password",
+        "verify_ssl": false
     },
     {
         "id": "2",
         "name": "Your Proxmox Host 2",
         "host": "your_proxmox_host_ip_2",
         "user": "api-user@pve",
-        "password": "your_password"
+        "password": "your_password",
+        "verify_ssl": true
     }
 ]
 ```
 - `user` should be a Proxmox user with API access (see Permissions below).
+- `verify_ssl` (optional, default: `true`): Set to `false` to disable SSL certificate verification (useful for self-signed certificates or local testing). **Warning:** Disabling SSL verification is insecure and should only be used in trusted environments.
 
 ### 3. Run the Backend
 ```bash
@@ -111,6 +112,7 @@ python3 -m http.server 8000
 - Ensure your machine can reach all Proxmox hosts via network and API.
 - Credentials in `proxmox_hosts.json` must be valid and have API access.
 - For production, secure your credentials and use HTTPS.
+- If your Proxmox server uses a self-signed certificate, you may need to set `"verify_ssl": false` in your host config. **Disabling SSL verification is insecure and should only be used for local/testing purposes.**
 
 ---
 
