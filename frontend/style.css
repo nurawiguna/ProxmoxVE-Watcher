@@ -493,4 +493,7 @@ body::before {
         width: 100%;
         margin-left: 0;
     }
+}
+#toggleBaremetalListBtn {
+    margin-bottom: 0;
 } 

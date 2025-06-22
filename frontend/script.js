@@ -417,5 +417,23 @@ searchInput.addEventListener('input', (e) => {
     // ... existing code for search ...
 });
 
+// Baremetal List toggle logic
+const nodesList = document.getElementById('nodesList');
+const toggleBaremetalListBtn = document.getElementById('toggleBaremetalListBtn');
+let baremetalListVisible = false;
+
+function setBaremetalListVisibility(visible) {
+    baremetalListVisible = visible;
+    nodesList.style.display = visible ? '' : 'none';
+    toggleBaremetalListBtn.textContent = visible ? 'Hide List' : 'Show List';
+}
+
+// Hide baremetal list by default
+setBaremetalListVisibility(false);
+
+toggleBaremetalListBtn.addEventListener('click', () => {
+    setBaremetalListVisibility(!baremetalListVisible);
+});
+
 // Initial data fetch
 fetchHosts(); 
