@@ -295,15 +295,24 @@ function updateStats() {
 
 // Format memory size
 function formatMemory(bytes) {
+    if (!bytes || bytes === 0) return 'N/A';
+    const tb = bytes / (1024 * 1024 * 1024 * 1024);
+    if (tb >= 1) {
+        return Number.isInteger(tb) ? `${tb}TB` : `${tb.toFixed(2)}TB`;
+    }
     const gb = bytes / (1024 * 1024 * 1024);
-    return `${gb.toFixed(2)}GB`;
+    return Number.isInteger(gb) ? `${gb}GB` : `${gb.toFixed(2)}GB`;
 }
 
 // Format storage size
 function formatStorage(bytes) {
     if (!bytes || bytes === 0) return 'N/A';
+    const tb = bytes / (1024 * 1024 * 1024 * 1024);
+    if (tb >= 1) {
+        return Number.isInteger(tb) ? `${tb}TB` : `${tb.toFixed(2)}TB`;
+    }
     const gb = bytes / (1024 * 1024 * 1024);
-    return `${gb.toFixed(2)}GB`;
+    return Number.isInteger(gb) ? `${gb}GB` : `${gb.toFixed(2)}GB`;
 }
 
 // Format uptime
