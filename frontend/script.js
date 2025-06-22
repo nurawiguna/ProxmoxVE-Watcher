@@ -171,31 +171,25 @@ function displayNodes() {
         } else {
             return `<div class="server-item simple-card" data-host="${host.id}" style="opacity:0.6;cursor:default;">
                 <div class="server-name">
-                    <i class="fas fa-exclamation-triangle"></i>(No nodes online)
+                    <i class="fas fa-exclamation-triangle"></i> (${host.name} is not available)
                 </div>
-                <div class="server-info">
-                    <div class="server-info-row">
-                        <i class="fas fa-server"></i>
-                        <span class="server-info-label">Host:</span>
-                        <span class="server-info-value">${host.name}</span>
+                <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:2px;">
+                    <div style="display:flex;align-items:center;gap:5px;font-size:0.98rem;">
+                        <i class="fas fa-globe"></i>
+                        <span>${host.host}</span>
                     </div>
-                    <div class="server-info-row">
+                    <div style="display:flex;align-items:center;gap:5px;font-size:0.98rem;">
                         <i class="fas fa-building"></i>
-                        <span class="server-info-label">Company:</span>
-                        <span class="server-info-value">${host.company || '-'}</span>
+                        <span>${host.company || '-'}</span>
                     </div>
-                    <div class="server-info-row">
+                    <div style="display:flex;align-items:center;gap:5px;font-size:0.98rem;">
                         <i class="fas fa-map-marker-alt"></i>
-                        <span class="server-info-label">Site:</span>
-                        <span class="server-info-value">${host.site || '-'}</span>
+                        <span>${host.site || '-'}</span>
                     </div>
-                    <div class="server-info-row">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <span class="server-info-label">Status:</span>
+                    <div style="display:flex;align-items:center;gap:5px;font-size:0.98rem;">
                         <span class="status-indicator offline">
                             <i class="fas fa-times-circle"></i>
-                            Offline
-                        </span>
+                            Offline</span>
                     </div>
                 </div>
             </div>`;
