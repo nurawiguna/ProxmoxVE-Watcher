@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proxmox Infrastructure Dashboard</title>
+    <link rel="icon" type="image/png" href="https://img.icons8.com/?size=100&id=GxnnEGl75yew&format=png&color=000000">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -76,7 +77,10 @@
 
         <div class="content-grid">
             <div class="servers-panel">
-                <h2 class="panel-title"><i class="fas fa-server"></i>Baremetal Servers</h2>
+                <div class="panel-title panel-title-flex">
+                    <span><i class="fas fa-server"></i>Baremetal Servers</span>
+                    <button id="toggleBaremetalListBtn" class="toggle-vm-list-btn" type="button" aria-controls="nodesList">Show List</button>
+                </div>
                 <button id="clearNodeSelectionBtn"><i class="fas fa-times"></i>Clear Node Selection</button>
                 <div id="nodesList"></div>
             </div>

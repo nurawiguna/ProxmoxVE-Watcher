@@ -171,31 +171,25 @@ function displayNodes() {
         } else {
             return `<div class="server-item simple-card" data-host="${host.id}" style="opacity:0.6;cursor:default;">
                 <div class="server-name">
-                    <i class="fas fa-exclamation-triangle"></i>(No nodes online)
+                    <i class="fas fa-exclamation-triangle"></i> (${host.name} is not available)
                 </div>
-                <div class="server-info">
-                    <div class="server-info-row">
-                        <i class="fas fa-server"></i>
-                        <span class="server-info-label">Host:</span>
-                        <span class="server-info-value">${host.name}</span>
+                <div class="server-info-row">
+                    <div style="display:flex;align-items:center;gap:5px;font-size:0.98rem;">
+                        <i class="fas fa-globe"></i>
+                        <span>${host.host}</span>
                     </div>
-                    <div class="server-info-row">
+                    <div style="display:flex;align-items:center;gap:5px;font-size:0.98rem;">
                         <i class="fas fa-building"></i>
-                        <span class="server-info-label">Company:</span>
-                        <span class="server-info-value">${host.company || '-'}</span>
+                        <span>${host.company || '-'}</span>
                     </div>
-                    <div class="server-info-row">
+                    <div style="display:flex;align-items:center;gap:5px;font-size:0.98rem;">
                         <i class="fas fa-map-marker-alt"></i>
-                        <span class="server-info-label">Site:</span>
-                        <span class="server-info-value">${host.site || '-'}</span>
+                        <span>${host.site || '-'}</span>
                     </div>
-                    <div class="server-info-row">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <span class="server-info-label">Status:</span>
+                    <div style="display:flex;align-items:center;gap:5px;font-size:0.98rem;">
                         <span class="status-indicator offline">
                             <i class="fas fa-times-circle"></i>
-                            Offline
-                        </span>
+                            Offline</span>
                     </div>
                 </div>
             </div>`;
@@ -301,15 +295,24 @@ function updateStats() {
 
 // Format memory size
 function formatMemory(bytes) {
+    if (!bytes || bytes === 0) return 'N/A';
+    const tb = bytes / (1024 * 1024 * 1024 * 1024);
+    if (tb >= 1) {
+        return Number.isInteger(tb) ? `${tb}TB` : `${tb.toFixed(2)}TB`;
+    }
     const gb = bytes / (1024 * 1024 * 1024);
-    return `${gb.toFixed(2)}GB`;
+    return Number.isInteger(gb) ? `${gb}GB` : `${gb.toFixed(2)}GB`;
 }
 
 // Format storage size
 function formatStorage(bytes) {
     if (!bytes || bytes === 0) return 'N/A';
+    const tb = bytes / (1024 * 1024 * 1024 * 1024);
+    if (tb >= 1) {
+        return Number.isInteger(tb) ? `${tb}TB` : `${tb.toFixed(2)}TB`;
+    }
     const gb = bytes / (1024 * 1024 * 1024);
-    return `${gb.toFixed(2)}GB`;
+    return Number.isInteger(gb) ? `${gb}GB` : `${gb.toFixed(2)}GB`;
 }
 
 // Format uptime
@@ -415,6 +418,25 @@ const searchInput = document.getElementById('searchInput');
 searchInput.addEventListener('input', (e) => {
     setVmListVisibility(true);
     // ... existing code for search ...
+});
+
+// Baremetal List toggle logic
+const nodesList = document.getElementById('nodesList');
+const toggleBaremetalListBtn = document.getElementById('toggleBaremetalListBtn');
+let baremetalListVisible = false;
+
+function setBaremetalListVisibility(visible) {
+    baremetalListVisible = visible;
+    nodesList.style.display = visible ? '' : 'none';
+    toggleBaremetalListBtn.textContent = visible ? 'Hide List' : 'Show List';
+    toggleBaremetalListBtn.setAttribute('aria-expanded', visible.toString());
+}
+
+// Hide baremetal list by default
+setBaremetalListVisibility(false);
+
+toggleBaremetalListBtn.addEventListener('click', () => {
+    setBaremetalListVisibility(!baremetalListVisible);
 });
 
 // Initial data fetch
