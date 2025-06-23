@@ -429,6 +429,7 @@ function setBaremetalListVisibility(visible) {
     baremetalListVisible = visible;
     nodesList.style.display = visible ? '' : 'none';
     toggleBaremetalListBtn.textContent = visible ? 'Hide List' : 'Show List';
+    toggleBaremetalListBtn.setAttribute('aria-expanded', visible.toString());
 }
 
 // Hide baremetal list by default
