@@ -173,7 +173,7 @@ function displayNodes() {
                 <div class="server-name">
                     <i class="fas fa-exclamation-triangle"></i> (${host.name} is not available)
                 </div>
-                <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:2px;">
+                <div class="server-info-row">
                     <div style="display:flex;align-items:center;gap:5px;font-size:0.98rem;">
                         <i class="fas fa-globe"></i>
                         <span>${host.host}</span>
