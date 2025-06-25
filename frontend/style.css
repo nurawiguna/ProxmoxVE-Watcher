@@ -474,6 +474,61 @@ body::before {
 .server-item.selected .server-name {
     color: #fff !important;
 }
+
+/* Show More Button Styles */
+.show-more-btn {
+    margin-top: 4px;
+    margin-bottom: 2px;
+    padding: 2px 14px;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    border: none;
+    background: #e9ecef;
+    color: #495057;
+    cursor: pointer;
+    transition: all 0.2s;
+    float: right;
+}
+
+.show-more-btn:hover {
+    background: #dee2e6;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.show-more-btn.expanded {
+    background: #065BA8;
+    color: white;
+    box-shadow: 0 2px 8px rgba(6,91,168,0.3);
+}
+
+.show-more-btn.expanded:hover {
+    background: #407eb9;
+    box-shadow: 0 4px 12px rgba(6,91,168,0.4);
+}
+
+.server-item.selected .show-more-btn {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.server-item.selected .show-more-btn:hover {
+    background: rgba(255,255,255,0.3);
+    border: 1px solid rgba(255,255,255,0.5);
+}
+
+.server-item.selected .show-more-btn.expanded {
+    background: rgba(255,255,255,0.9);
+    color: #065BA8;
+    border: 1px solid rgba(255,255,255,0.9);
+    font-weight: 600;
+}
+
+.server-item.selected .show-more-btn.expanded:hover {
+    background: white;
+    color: #065BA8;
+}
 @media (max-width: 768px) {
     .content-grid {
         grid-template-columns: 1fr;
