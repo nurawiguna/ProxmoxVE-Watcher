@@ -8,40 +8,70 @@ let selectedNode = null;
 let nodeStatusData = {}; // Store detailed node status information
 let expandedNodes = {};
 
-// Fetch all hosts
+// Fetch all hosts with sessionStorage caching
 async function fetchHosts() {
+    // Try to load from sessionStorage first
+    let cachedHosts = sessionStorage.getItem('proxmox_hosts');
+    let cachedNodes = sessionStorage.getItem('proxmox_nodes');
+    let usedCache = false;
+    if (cachedHosts && cachedNodes) {
+        try {
+            currentHosts = JSON.parse(cachedHosts);
+            currentNodes = JSON.parse(cachedNodes);
+            displayNodes();
+            updateStats();
+            usedCache = true;
+        } catch (e) {
+            // Ignore parse errors, fallback to fetch
+        }
+    }
+    // Always fetch fresh data in the background
     try {
         const response = await fetch(`${API_BASE_URL}/hosts`);
         const hosts = await response.json();
         currentHosts = hosts;
+        sessionStorage.setItem('proxmox_hosts', JSON.stringify(hosts));
         // Fetch nodes for each host
+        let allNodes = [];
         for (const host of hosts) {
-            await fetchNodes(host.id);
+            const nodes = await fetchNodes(host.id, true); // true = silent (don't display)
+            allNodes = allNodes.concat(nodes);
         }
+        currentNodes = allNodes;
+        sessionStorage.setItem('proxmox_nodes', JSON.stringify(allNodes));
+        displayNodes();
+        updateStats();
     } catch (error) {
         console.error('Error fetching hosts:', error);
+        if (!usedCache) {
+            // If no cache, show error UI (optional)
+        }
     }
 }
 
-// Fetch nodes for a specific host
-async function fetchNodes(hostId) {
+// Fetch nodes for a specific host, optionally silent (don't update UI)
+async function fetchNodes(hostId, silent = false) {
     try {
         const response = await fetch(`${API_BASE_URL}/hosts/${hostId}/nodes`);
         const nodes = await response.json();
-        currentNodes = [...currentNodes, ...nodes];
+        if (!silent) {
+            currentNodes = [...currentNodes, ...nodes];
+            displayNodes();
+            updateStats();
+        }
         // Fetch detailed status for each node
         for (const node of nodes) {
             await fetchNodeStatus(hostId, node.node);
         }
-        displayNodes();
-        updateStats();
         // Fetch VMs and containers for each node
         for (const node of nodes) {
             await fetchVMs(hostId, node.node);
             await fetchContainers(hostId, node.node);
         }
+        return nodes;
     } catch (error) {
         console.error(`Error fetching nodes for host ${hostId}:`, error);
+        return [];
     }
 }
 
