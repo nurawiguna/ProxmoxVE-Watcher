@@ -83,10 +83,8 @@ async function fetchNodes(hostId, silent = false) {
             displayNodes();
             updateStats();
         }
-        // Fetch detailed status for each node
-        for (const node of nodes) {
-            await fetchNodeStatus(hostId, node.node);
-        }
+        // Fetch detailed status for each node in parallel
+        await Promise.all(nodes.map(node => fetchNodeStatus(hostId, node.node)));
         // Fetch VMs and containers for each node
         for (const node of nodes) {
             await fetchVMs(hostId, node.node);
