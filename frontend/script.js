@@ -254,7 +254,7 @@ function displayVMs(filteredItems) {
             <div class="vm-details">
                 <div><i class="fas fa-hashtag"></i><b>ID:</b> ${item.vmid || item.id || '-'}</div>
                 <div><i class="fas fa-tag"></i>Type: ${item.type || 'VM'}</div>
-                <div><i class="fas fa-server"></i>Baremetal: ${item.host_name}</div>
+                <div><i class="fas fa-server"></i>Baremetal: ${item.node}</div>
                 <div><i class="fas fa-microchip"></i>Resource: ${formatMemory(item.maxmem || 0)} RAM, ${item.cpus || '-'} cores, ${item.maxdisk !== undefined ? `${formatStorage(item.maxdisk)}` : ''} DISK</div>
             </div>
             <div class="status ${item.status === 'running' ? 'running' : 'stopped'}">
