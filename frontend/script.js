@@ -15,7 +15,7 @@ async function fetchHosts() {
     let cachedNodes = sessionStorage.getItem('proxmox_nodes');
     let hostsTimestamp = Number(sessionStorage.getItem('proxmox_hosts_timestamp'));
     let nodesTimestamp = Number(sessionStorage.getItem('proxmox_nodes_timestamp'));
-    let cacheExpirationTime = 5 * 60 * 1000; // 5 minutes in milliseconds
+    let cacheExpirationTime = CACHE_EXPIRATION_MS;
     let currentTime = Date.now();
     let usedCache = false;
     if (cachedHosts && cachedNodes && Number.isFinite(hostsTimestamp) && hostsTimestamp >= 0 && Number.isFinite(nodesTimestamp) && nodesTimestamp >= 0) {
