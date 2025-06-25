@@ -56,6 +56,7 @@ async function fetchHosts() {
         }
         currentNodes = allNodes;
         sessionStorage.setItem('proxmox_nodes', JSON.stringify(allNodes));
+        sessionStorage.setItem('proxmox_nodes_timestamp', Date.now());
         displayNodes();
         updateStats();
     } catch (error) {
