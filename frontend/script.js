@@ -22,7 +22,9 @@ async function fetchHosts() {
             updateStats();
             usedCache = true;
         } catch (e) {
-            // Ignore parse errors, fallback to fetch
+            console.warn('JSON.parse error for cached data. Clearing corrupted sessionStorage entries.', e);
+            sessionStorage.removeItem('proxmox_hosts');
+            sessionStorage.removeItem('proxmox_nodes');
         }
     }
     // Always fetch fresh data in the background
