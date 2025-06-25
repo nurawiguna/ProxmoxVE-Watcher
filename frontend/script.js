@@ -46,7 +46,8 @@ async function fetchHosts() {
     } catch (error) {
         console.error('Error fetching hosts:', error);
         if (!usedCache) {
-            // If no cache, show error UI (optional)
+            // If no cache, show error UI
+            displayErrorMessage('Failed to load data. Please check your connection and try again.');
         }
     }
 }
