@@ -51,8 +51,16 @@ async function fetchHosts() {
         const response = await fetch(`${API_BASE_URL}/hosts`);
         const hosts = await response.json();
         currentHosts = hosts;
-        sessionStorage.setItem('proxmox_hosts', JSON.stringify(hosts));
-        sessionStorage.setItem('proxmox_hosts_timestamp', Date.now());
+        try {
+            sessionStorage.setItem('proxmox_hosts', JSON.stringify(hosts));
+            sessionStorage.setItem('proxmox_hosts_timestamp', Date.now());
+        } catch (e) {
+            if (e.name === 'QuotaExceededError') {
+                console.warn('QuotaExceededError: Unable to store proxmox_hosts in sessionStorage. Consider clearing old cache entries.', e);
+            } else {
+                throw e;
+            }
+        }
         // Fetch nodes for each host
         let allNodes = [];
         for (const host of hosts) {
