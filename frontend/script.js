@@ -13,18 +13,32 @@ async function fetchHosts() {
     // Try to load from sessionStorage first
     let cachedHosts = sessionStorage.getItem('proxmox_hosts');
     let cachedNodes = sessionStorage.getItem('proxmox_nodes');
+    let hostsTimestamp = sessionStorage.getItem('proxmox_hosts_timestamp');
+    let nodesTimestamp = sessionStorage.getItem('proxmox_nodes_timestamp');
+    let cacheExpirationTime = 5 * 60 * 1000; // 5 minutes in milliseconds
+    let currentTime = Date.now();
     let usedCache = false;
-    if (cachedHosts && cachedNodes) {
-        try {
-            currentHosts = JSON.parse(cachedHosts);
-            currentNodes = JSON.parse(cachedNodes);
-            displayNodes();
-            updateStats();
-            usedCache = true;
-        } catch (e) {
-            console.warn('JSON.parse error for cached data. Clearing corrupted sessionStorage entries.', e);
+    if (cachedHosts && cachedNodes && hostsTimestamp && nodesTimestamp) {
+        if (currentTime - hostsTimestamp < cacheExpirationTime && currentTime - nodesTimestamp < cacheExpirationTime) {
+            try {
+                currentHosts = JSON.parse(cachedHosts);
+                currentNodes = JSON.parse(cachedNodes);
+                displayNodes();
+                updateStats();
+                usedCache = true;
+            } catch (e) {
+                console.warn('JSON.parse error for cached data. Clearing corrupted sessionStorage entries.', e);
+                sessionStorage.removeItem('proxmox_hosts');
+                sessionStorage.removeItem('proxmox_nodes');
+                sessionStorage.removeItem('proxmox_hosts_timestamp');
+                sessionStorage.removeItem('proxmox_nodes_timestamp');
+            }
+        } else {
+            // Clear expired cache
             sessionStorage.removeItem('proxmox_hosts');
             sessionStorage.removeItem('proxmox_nodes');
+            sessionStorage.removeItem('proxmox_hosts_timestamp');
+            sessionStorage.removeItem('proxmox_nodes_timestamp');
         }
     }
     // Always fetch fresh data in the background
