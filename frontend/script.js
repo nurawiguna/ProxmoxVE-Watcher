@@ -47,6 +47,7 @@ async function fetchHosts() {
         const hosts = await response.json();
         currentHosts = hosts;
         sessionStorage.setItem('proxmox_hosts', JSON.stringify(hosts));
+        sessionStorage.setItem('proxmox_hosts_timestamp', Date.now());
         // Fetch nodes for each host
         let allNodes = [];
         for (const host of hosts) {
