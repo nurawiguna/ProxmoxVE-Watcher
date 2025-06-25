@@ -13,8 +13,8 @@ async function fetchHosts() {
     // Try to load from sessionStorage first
     let cachedHosts = sessionStorage.getItem('proxmox_hosts');
     let cachedNodes = sessionStorage.getItem('proxmox_nodes');
-    let hostsTimestamp = sessionStorage.getItem('proxmox_hosts_timestamp');
-    let nodesTimestamp = sessionStorage.getItem('proxmox_nodes_timestamp');
+    let hostsTimestamp = Number(sessionStorage.getItem('proxmox_hosts_timestamp'));
+    let nodesTimestamp = Number(sessionStorage.getItem('proxmox_nodes_timestamp'));
     let cacheExpirationTime = 5 * 60 * 1000; // 5 minutes in milliseconds
     let currentTime = Date.now();
     let usedCache = false;
