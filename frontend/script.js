@@ -42,9 +42,11 @@ async function fetchHosts() {
         }
     }
     // Always fetch fresh data in the background
-    currentNodes = [];
-    currentVMs = [];
-    currentContainers = [];
+    if (!usedCache) {
+        currentNodes = [];
+        currentVMs = [];
+        currentContainers = [];
+    }
     try {
         const response = await fetch(`${API_BASE_URL}/hosts`);
         const hosts = await response.json();
