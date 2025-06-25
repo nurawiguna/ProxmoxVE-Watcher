@@ -18,7 +18,7 @@ async function fetchHosts() {
     let cacheExpirationTime = 5 * 60 * 1000; // 5 minutes in milliseconds
     let currentTime = Date.now();
     let usedCache = false;
-    if (cachedHosts && cachedNodes && hostsTimestamp && nodesTimestamp) {
+    if (cachedHosts && cachedNodes && Number.isFinite(hostsTimestamp) && hostsTimestamp >= 0 && Number.isFinite(nodesTimestamp) && nodesTimestamp >= 0) {
         if (currentTime - hostsTimestamp < cacheExpirationTime && currentTime - nodesTimestamp < cacheExpirationTime) {
             try {
                 currentHosts = JSON.parse(cachedHosts);
