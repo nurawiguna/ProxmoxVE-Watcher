@@ -16,7 +16,7 @@ class AppState {
         this.uiState = {
             vmListVisible: false,
             baremetalListVisible: false,
-            statsVisible: false
+            statsVisible: true
         };
     }
 
@@ -68,8 +68,7 @@ class DOMCache {
             'totalVMsRunning', 'totalContainersRunning',
             'totalVMsStopped', 'totalContainersStopped',
             'totalRAM', 'totalCPU', 'totalDisk',
-            'clearNodeSelectionBtn', 'toggleStatsBtn',
-            'toggleVmListBtn', 'toggleBaremetalListBtn'
+            'toggleStatsBtn', 'toggleVmListBtn', 'toggleBaremetalListBtn'
         ];
 
         elementIds.forEach(id => {
@@ -235,7 +234,6 @@ class DisplayManager {
         }).join('');
 
         this.attachNodeEventListeners();
-        this.updateClearButtonVisibility();
     }
 
     static renderHostNodes(host, nodes) {
@@ -396,7 +394,6 @@ class DisplayManager {
             appState.selectedHostId = item.dataset.host;
             appState.selectedNode = item.dataset.node;
             this.displayVMs();
-            this.updateClearButtonVisibility();
             // Show VM list if hidden
             UIManager.setVmListVisibility(true);
         }
@@ -407,7 +404,6 @@ class DisplayManager {
         appState.selectedNode = null;
         document.querySelectorAll('.server-item').forEach(i => i.classList.remove('selected'));
         this.displayVMs();
-        this.updateClearButtonVisibility();
     }
 
     static handleShowMoreToggle(e, btn) {
@@ -416,13 +412,6 @@ class DisplayManager {
         const [hostId, node] = statusKey.split('-');
         appState.toggleNodeExpansion(hostId, node);
         this.displayNodes();
-    }
-
-    static updateClearButtonVisibility() {
-        const clearBtn = domCache.get('clearNodeSelectionBtn');
-        if (clearBtn) {
-            clearBtn.style.display = (appState.selectedHostId && appState.selectedNode) ? 'inline-flex' : 'none';
-        }
     }
 
     static displayVMs(filteredItems) {
@@ -617,7 +606,6 @@ class SearchAndFilterManager {
 class UIManager {
     static init() {
         this.setupToggleHandlers();
-        this.setupClearSelectionHandler();
         this.initializeUIState();
     }
 
@@ -691,16 +679,6 @@ class UIManager {
         if (toggleBaremetalListBtn) {
             toggleBaremetalListBtn.textContent = visible ? 'Hide List' : 'Show List';
             toggleBaremetalListBtn.setAttribute('aria-expanded', visible.toString());
-        }
-    }
-
-    static setupClearSelectionHandler() {
-        const clearBtn = domCache.get('clearNodeSelectionBtn');
-        
-        if (clearBtn) {
-            clearBtn.addEventListener('click', () => {
-                DisplayManager.handleNodeDeselection();
-            });
         }
     }
 
