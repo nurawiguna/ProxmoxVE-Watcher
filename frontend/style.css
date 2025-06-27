@@ -451,26 +451,7 @@ body::before {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
-#clearNodeSelectionBtn {
-    margin-bottom: 10px;
-    display: none;
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: none;
-    background: #e9ecef;
-    color: #495057;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-}
-#clearNodeSelectionBtn i {
-    margin-right: 5px;
-}
-#clearNodeSelectionBtn:hover {
-    background: #065BA8;
-    color: white;
-}
+
 .server-item.selected .server-name {
     color: #fff !important;
 }
