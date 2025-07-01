@@ -27,7 +27,7 @@ A modern, responsive web dashboard for managing and monitoring Proxmox Virtual E
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/nurawiguna/proxmox-ve-watcher/
+git clone https://github.com/nurawiguna/ProxmoxVE-Watcher
 cd proxmox-watcher
 ```
 
@@ -126,7 +126,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 If you use this project in your work, please provide attribution by:
 - Keeping the original license and copyright notice
 - Mentioning this repository in your documentation or credits
-- Linking back to: [Proxmox VE - Watcher](https://github.com/nurawiguna/proxmox-ve-watcher/)
+- Linking back to: [Proxmox VE - Watcher](https://github.com/nurawiguna/ProxmoxVE-Watcher)
 
 **Example attribution:**
 ```
@@ -145,8 +145,8 @@ https://github.com/nurawiguna/proxmox_dashboard
 
 ## 📧 Support & Contact
 
-- **Issues**: [GitHub Issues](https://github.com/nurawiguna/proxmox-ve-watcher/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/nurawiguna/proxmox-ve-watcher/discussions)
+- **Issues**: [GitHub Issues](https://github.com/nurawiguna/ProxmoxVE-Watcher/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/nurawiguna/ProxmoxVE-Watcher/discussions)
 - **Author**: [Nura Wiguna](https://github.com/nurawiguna)
 
 ---
