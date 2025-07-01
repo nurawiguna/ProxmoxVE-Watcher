@@ -130,8 +130,8 @@ If you use this project in your work, please provide attribution by:
 
 **Example attribution:**
 ```
-Based on Proxmox Dashboard by Nura Wiguna
-https://github.com/nurawiguna/proxmox_dashboard
+Based on Proxmox VE - Watcher by Nura Wiguna
+https://github.com/nurawiguna/ProxmoxVE-Watcher
 ```
 
 ### 🔄 Free to Use
