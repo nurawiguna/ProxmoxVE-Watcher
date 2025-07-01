@@ -27,7 +27,7 @@ A modern, responsive web dashboard for managing and monitoring Proxmox Virtual E
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/bynura/proxmox-watcher
+git clone https://github.com/nurawiguna/proxmox-ve-watcher/
 cd proxmox-watcher
 ```
 
@@ -145,8 +145,8 @@ https://github.com/nurawiguna/proxmox_dashboard
 
 ## 📧 Support & Contact
 
-- **Issues**: [GitHub Issues](https://github.com/bynura/proxmox-watcher/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/bynura/proxmox-watcher/discussions)
+- **Issues**: [GitHub Issues](https://github.com/nurawiguna/proxmox-ve-watcher/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/nurawiguna/proxmox-ve-watcher/discussions)
 - **Author**: [Nura Wiguna](https://github.com/nurawiguna)
 
 ---
@@ -159,7 +159,7 @@ https://github.com/nurawiguna/proxmox_dashboard
 
 ---
 
-## 📸 Screenshot
+## 📸 Screenshot Template Overview
 ![Proxmox Dashboard Screenshot](ss.png)
 
 *Modern, responsive dashboard interface for managing Proxmox infrastructure*
