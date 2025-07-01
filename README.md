@@ -126,7 +126,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 If you use this project in your work, please provide attribution by:
 - Keeping the original license and copyright notice
 - Mentioning this repository in your documentation or credits
-- Linking back to: https://github.com/nurawiguna/proxmox_dashboard
+- Linking back to: [Proxmox VE - Watcher](https://github.com/nurawiguna/proxmox-ve-watcher/)
 
 **Example attribution:**
 ```
