@@ -1,2 +1,3 @@
 backend/proxmox_hosts.json
 .vscode
+backend/venv
