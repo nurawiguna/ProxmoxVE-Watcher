@@ -2,7 +2,7 @@
 
 A modern, responsive web dashboard for managing and monitoring Proxmox Virtual Environment (PVE) infrastructure. Built with Python Flask backend and vanilla JavaScript frontend.
 
-## ⚡ Built with [Cursor AI](https://cursor.sh/) & Design inspired from [Claude AI] (https://claude.ai)
+## ⚡ Built with [Cursor AI](https://cursor.sh/) & Design inspired from [Claude AI](https://claude.ai)
 This project was design from [Claude AI] (https://claude.ai) - an AI-powered platform for building stunning apps & websites by chatting with AI, and developed with [Cursor AI](https://cursor.sh/) - the AI-first code editor.
 
 ## 🌟 Features
