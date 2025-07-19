@@ -2,8 +2,9 @@
 
 A modern, responsive web dashboard for managing and monitoring Proxmox Virtual Environment (PVE) infrastructure. Built with Python Flask backend and vanilla JavaScript frontend.
 
-## ⚡ Built with [Cursor AI](https://cursor.sh/) & Design inspired from [Claude AI](https://claude.ai)
-This project was design from [Claude AI] (https://claude.ai) - an AI-powered platform for building stunning apps & websites by chatting with AI, and developed with [Cursor AI](https://cursor.sh/) - the AI-first code editor.
+## ⚡ Built with [Cursor AI](https://cursor.sh/) · Design Inspired by [Claude AI](https://claude.ai)
+
+This project was **designed with inspiration from [Claude AI](https://claude.ai)** — an AI-powered platform for building elegant apps and websites through natural language interaction — and **developed using [Cursor AI](https://cursor.sh/)**, an AI-first code editor tailored for developers.
 
 ## 🌟 Features
 
@@ -169,8 +170,11 @@ https://github.com/nurawiguna/ProxmoxVE-Watcher
 *Modern, responsive dashboard interface for managing Proxmox infrastructure*
 
 --- 
+
 <p align="center">
    <a href="https://coff.ee/nurawiguna">
       <img src="https://cdn.buymeacoffee.com/buttons/v2/default-orange.png" height="50" width="210" alt="Buy Me A Coffee" />
    </a>
 </p>
+
+--- 
