@@ -162,14 +162,6 @@ https://github.com/nurawiguna/ProxmoxVE-Watcher
 
 ---
 
-## 🌟 Acknowledgments
-
-- Built with [Flask](https://flask.palletsprojects.com/) and [Proxmoxer](https://github.com/proxmoxer/proxmoxer)
-- UI components styled with modern CSS and FontAwesome icons
-- Inspired by modern dashboard design principles
-
----
-
 ## 📸 Screenshot Template Overview
 ![Proxmox Dashboard Screenshot](ss.png)
 
