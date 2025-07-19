@@ -4,7 +4,7 @@ A modern, responsive web dashboard for managing and monitoring Proxmox Virtual E
 
 ## ⚡ Built with [Cursor AI](https://cursor.sh/) · Design Inspired by [Claude AI](https://claude.ai)
 
-This project was **designed with inspiration from [Claude AI](https://claude.ai)** — an AI-powered platform for building elegant apps and websites through natural language interaction — and **developed using [Cursor AI](https://cursor.sh/)**, an AI-first code editor tailored for developers.
+This project was **designed with inspiration from [Claude AI](https://claude.ai)** — an AI assistant/chatbot known for its conversational capabilities and natural language understanding — and **developed using [Cursor AI](https://cursor.sh/)**, an AI-first code editor tailored for developers.
 
 ## 🌟 Features
 
