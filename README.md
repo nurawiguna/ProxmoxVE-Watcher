@@ -148,6 +148,7 @@ https://github.com/nurawiguna/ProxmoxVE-Watcher
 - **Issues**: [GitHub Issues](https://github.com/nurawiguna/ProxmoxVE-Watcher/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/nurawiguna/ProxmoxVE-Watcher/discussions)
 - **Author**: [Nura Wiguna](https://github.com/nurawiguna)
+- **Buy me a Coffee: [Nura Wiguna] (https://coff.ee/nurawiguna)
 
 ---
 
