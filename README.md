@@ -151,7 +151,7 @@ https://github.com/nurawiguna/ProxmoxVE-Watcher
 - **Issues**: [GitHub Issues](https://github.com/nurawiguna/ProxmoxVE-Watcher/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/nurawiguna/ProxmoxVE-Watcher/discussions)
 - **Author**: [Nura Wiguna](https://github.com/nurawiguna)
-- **Buy me a Coffee: [Nura Wiguna] (https://coff.ee/nurawiguna)
+- **Buy me a Coffee**: [Nura Wiguna](https://coff.ee/nurawiguna)
 
 ---
 
@@ -169,3 +169,8 @@ https://github.com/nurawiguna/ProxmoxVE-Watcher
 *Modern, responsive dashboard interface for managing Proxmox infrastructure*
 
 --- 
+<p align="center">
+   <a href="https://coff.ee/nurawiguna">
+      <img src="https://cdn.buymeacoffee.com/buttons/v2/default-orange.png" height="50" width="210" alt="Buy Me A Coffee" />
+   </a>
+</p>
