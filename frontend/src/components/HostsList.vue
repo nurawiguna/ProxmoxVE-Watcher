@@ -74,16 +74,16 @@
               <p class="text-gray-500 font-medium mb-2">Node Information</p>
               <div class="space-y-1">
                 <div class="flex justify-between">
+                  <span>CPU Model:</span>
+                  <span class="font-medium">{{ node.cpuinfo.model || 'N/A' }} x{{ node.cpuinfo.sockets || 0 }}</span>
+                </div>
+                <div class="flex justify-between">
                   <span>Uptime:</span>
                   <span class="font-medium">{{ formatUptime(node.uptime) }}</span>
                 </div>
                 <div class="flex justify-between">
-                  <span>Load Avg:</span>
-                  <span class="font-medium">{{ node.loadavg?.join(', ') || 'N/A' }}</span>
-                </div>
-                <div class="flex justify-between">
-                  <span>Version:</span>
-                  <span class="font-medium">{{ node.pveversion || 'N/A' }}</span>
+                  <span>PVE Version:</span>
+                  <span class="font-medium">{{ extractPVEVersion(node.pveversion) || 'N/A' }}</span>
                 </div>
               </div>
             </div>
@@ -149,5 +149,12 @@ const toggleNodeExpansion = (node) => {
 
 const isNodeExpanded = (node) => {
   return proxmoxStore.isNodeExpanded(node.host_id, node.node)
+}
+
+const extractPVEVersion = (pveversion) => {
+  if (!pveversion) return null
+  // Extract version number from string like "pve-manager/8.0.3/bbf3993334bfa916"
+  const match = pveversion.match(/\/(\d+\.\d+\.\d+)\//)
+  return match ? match[1] : pveversion
 }
 </script>

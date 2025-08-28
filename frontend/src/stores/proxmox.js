@@ -132,14 +132,17 @@ export const useProxmoxStore = defineStore('proxmox', () => {
   // Add new computed for node-level resource usage (for host monitoring)
   const nodeRAMUsage = computed(() => {
     const totalUsed = nodes.value.reduce((sum, node) => {
-      return sum + (node.mem?.used || 0)
-    }, 0)
-    const totalMax = nodes.value.reduce((sum, node) => {
-      return sum + (node.mem?.max || 0)
+      return sum + (node.mem || 0)
     }, 0)
     
-    if (totalMax === 0) return '0%'
-    return `${Math.round((totalUsed / totalMax) * 100)}%`
+    if (totalUsed === 0) return '0 GB'
+    
+    // Convert bytes to appropriate unit (GB or TB)
+    if (totalUsed >= 1099511627776) { // 1TB in bytes
+      return `${(totalUsed / 1099511627776).toFixed(1)} TB`
+    } else {
+      return `${(totalUsed / 1073741824).toFixed(1)} GB` // 1GB in bytes
+    }
   })
 
   const nodeCPUUsage = computed(() => {
@@ -152,14 +155,20 @@ export const useProxmoxStore = defineStore('proxmox', () => {
 
   const nodeDiskUsage = computed(() => {
     const totalUsed = nodes.value.reduce((sum, node) => {
-      return sum + (node.disk?.used || 0)
+      return sum + (node.disk || 0)
     }, 0)
     const totalMax = nodes.value.reduce((sum, node) => {
-      return sum + (node.disk?.max || 0)
+      return sum + (node.maxdisk || 0)
     }, 0)
-    
-    if (totalMax === 0) return '0%'
-    return `${Math.round((totalUsed / totalMax) * 100)}%`
+
+    if (totalUsed === 0) return '0 GB'
+
+    // Convert bytes to appropriate unit (GB or TB)
+    if (totalUsed >= 1099511627776) { // 1TB in bytes
+      return `${(totalUsed / 1099511627776).toFixed(1)} TB`
+    } else {
+      return `${(totalUsed / 1073741824).toFixed(1)} GB` // 1GB in bytes
+    }
   })
 
   // Actions

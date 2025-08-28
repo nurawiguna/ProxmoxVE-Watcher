@@ -65,6 +65,19 @@ export const proxmoxApi = {
           const nodesResponse = await apiClient.get(`/hosts/${host.id}/nodes`)
           const nodes = nodesResponse.data
           console.log(`getAllData: Got ${nodes.length} nodes for host ${host.name}`)
+          
+          // Get detailed status for each node
+          for (const node of nodes) {
+            try {
+              const statusResponse = await apiClient.get(`/hosts/${host.id}/nodes/${node.node}/status`)
+              // Merge status data into node object
+              Object.assign(node, statusResponse.data)
+              console.log(`getAllData: Got status for ${host.name}/${node.node}`)
+            } catch (error) {
+              console.warn(`Failed to get status for ${host.name}/${node.node}:`, error.message)
+            }
+          }
+          
           allNodes.push(...nodes)
           
           // Get VMs and containers for each node

@@ -131,7 +131,7 @@
               color="red"
             />
             <StatCard
-              title="Node RAM Usage"
+              title="Node RAM Usagee"
               :value="proxmoxStore.nodeRAMUsage"
               icon="memory"
               color="blue"
