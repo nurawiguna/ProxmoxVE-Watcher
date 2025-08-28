@@ -74,7 +74,7 @@ export const useProxmoxStore = defineStore('proxmox', () => {
   const totalRAMUsage = computed(() => {
     // Calculate total RAM used by all VMs and containers
     const vmRAMUsed = vms.value.reduce((sum, vm) => {
-      return sum + (vm.mem || 0)
+      return sum + (vm.maxmem || 0)
     }, 0)
     
     const containerRAMUsed = containers.value.reduce((sum, container) => {
@@ -110,7 +110,7 @@ export const useProxmoxStore = defineStore('proxmox', () => {
   const totalDiskUsage = computed(() => {
     // Calculate total disk space used by all VMs and containers
     const vmDiskUsed = vms.value.reduce((sum, vm) => {
-      return sum + (vm.disk || 0)
+      return sum + (vm.maxdisk || 0)
     }, 0)
     
     const containerDiskUsed = containers.value.reduce((sum, container) => {

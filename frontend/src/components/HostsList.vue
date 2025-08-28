@@ -48,13 +48,13 @@
         <div>
           <p class="text-gray-500">Memory</p>
           <p class="font-medium">
-            {{ formatBytes(node.mem?.used) }} / {{ formatBytes(node.mem?.max) }}
+            {{ formatBytes(node.mem) }} / {{ formatBytes(node.maxmem) }}
           </p>
         </div>
         <div>
           <p class="text-gray-500">Disk</p>
           <p class="font-medium">
-            {{ formatBytes(node.disk?.used) }} / {{ formatBytes(node.disk?.max) }}
+            {{ formatBytes(node.disk) }} / {{ formatBytes(node.maxdisk) }}
           </p>
         </div>
       </div>
@@ -96,11 +96,11 @@
                 </div>
                 <div class="flex justify-between">
                   <span>Total Memory:</span>
-                  <span class="font-medium">{{ formatBytes(node.mem?.max) }}</span>
+                  <span class="font-medium">{{ formatBytes(node.maxmem) }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span>Total Disk:</span>
-                  <span class="font-medium">{{ formatBytes(node.disk?.max) }}</span>
+                  <span class="font-medium">{{ formatBytes(node.maxdisk) }}</span>
                 </div>
               </div>
             </div>
