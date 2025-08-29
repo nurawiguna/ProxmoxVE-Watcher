@@ -100,19 +100,19 @@
           <h3 class="text-lg font-semibold text-gray-900 mb-4">VM & Container Resource Usage</h3>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <StatCard
-              title="Total RAM Allocated"
-              :value="proxmoxStore.totalRAMUsage"
-              icon="memory"
-              color="indigo"
-            />
-            <StatCard
-              title="Total CPU Cores Allocated"
+              title="Total CPU Cores Usage"
               :value="proxmoxStore.totalCPUUsage"
               icon="cpu"
               color="pink"
             />
             <StatCard
-              title="Total Disk Space Allocated"
+              title="Total RAM Usage"
+              :value="proxmoxStore.totalRAMUsage"
+              icon="memory"
+              color="indigo"
+            />
+            <StatCard
+              title="Total Disk Usage"
               :value="proxmoxStore.totalDiskUsage"
               icon="hard-drive"
               color="yellow"
@@ -131,7 +131,7 @@
               color="red"
             />
             <StatCard
-              title="Node RAM Usagee"
+              title="Node RAM Usage"
               :value="proxmoxStore.nodeRAMUsage"
               icon="memory"
               color="blue"
