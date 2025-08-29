@@ -21,7 +21,7 @@
           <div>
             <h3 class="font-semibold text-gray-900">{{ vm.name || `VM ${vm.vmid}` }}</h3>
             <p class="text-sm text-gray-500">
-              {{ capitalize(vm.type) }} {{ vm.vmid }} on {{ vm.node }}
+              {{ vm.vmid }} on {{ vm.node }}
             </p>
           </div>
         </div>
@@ -111,7 +111,7 @@
                 </div>
                 <div class="flex justify-between">
                   <span>Type:</span>
-                  <span class="font-medium">{{ capitalize(vm.type) }}</span>
+                  <span class="font-medium">{{ vm.type?.toLowerCase() === 'lxc' ? 'Container' : 'VM' }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span>Node:</span>
