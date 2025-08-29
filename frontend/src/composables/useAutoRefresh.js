@@ -6,7 +6,7 @@ import { useProxmoxStore } from '@/stores/proxmox'
  * @param {number} interval - Refresh interval in milliseconds
  * @param {boolean} immediate - Whether to start immediately
  */
-export const useAutoRefresh = (interval = 30000, immediate = true) => {
+export const useAutoRefresh = (interval = 30000, immediate = false) => {
   const proxmoxStore = useProxmoxStore()
   const isActive = ref(false)
   let intervalId = null
