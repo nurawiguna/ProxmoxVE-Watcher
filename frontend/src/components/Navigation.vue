@@ -7,7 +7,7 @@
           <div class="flex items-center space-x-2">
             <ServerIcon class="h-8 w-8 text-blue-600" />
             <h1 class="text-xl font-bold gradient-text">
-              Proxmox VE - Watcher
+              {{ appTitle }}
             </h1>
           </div>
         </div>
@@ -107,7 +107,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useProxmoxStore } from '@/stores/proxmox'
 import { useAutoRefresh } from '@/composables/useAutoRefresh'
 import {
@@ -123,6 +123,9 @@ import {
 const proxmoxStore = useProxmoxStore()
 const autoRefresh = useAutoRefresh()
 const mobileMenuOpen = ref(false)
+
+// Get app title from environment variables
+const appTitle = computed(() => import.meta.env.APP_TITLE || 'Proxmox VE - Watcher')
 
 const navigationLinks = [
   {
