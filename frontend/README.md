@@ -78,6 +78,7 @@ frontend/
 │   └── style.css          # Global styles
 ├── public/                 # Static assets
 ├── dist/                  # Production build output
+├── .env                   # Environment variables
 └── package.json           # Dependencies and scripts
 ```
 
@@ -85,8 +86,8 @@ frontend/
 
 ### Environment Variables
 
-- `VITE_API_BASE_URL` - Backend API URL
-- `VITE_APP_TITLE` - Application title
+- `API_BASE_URL` - Backend API URL
+- `APP_TITLE` - Application title
 - `VITE_APP_VERSION` - Application version
 
 ### Build Configuration
