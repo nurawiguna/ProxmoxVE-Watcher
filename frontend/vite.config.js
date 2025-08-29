@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
     cors: true,
     proxy: {
       '/api': {
-        target: env.API_BASE_URL || 'http://127.0.0.1:5000',
+        target: env.API_BASE_URL,
         changeOrigin: true,
         secure: false,
       },
