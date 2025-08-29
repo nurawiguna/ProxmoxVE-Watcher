@@ -125,7 +125,7 @@ const autoRefresh = useAutoRefresh()
 const mobileMenuOpen = ref(false)
 
 // Get app title from environment variables
-const appTitle = computed(() => import.meta.env.APP_TITLE || 'Proxmox VE - Watcher')
+const appTitle = computed(() => import.meta.env.VITE_APP_TITLE || 'Proxmox VE Watcher')
 
 const navigationLinks = [
   {
