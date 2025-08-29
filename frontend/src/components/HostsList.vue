@@ -145,10 +145,7 @@ const { sortedData: sortedFilteredNodes, sortField, sortDirection, toggleSort } 
 
 // Get sort icon component based on current sort state
 const getSortIconComponent = () => {
-  if (sortField.value === 'node') {
-    return sortDirection.value === 'asc' ? Bars3BottomLeftIcon : Bars3BottomRightIcon
-  }
-  return Bars3BottomLeftIcon
+  return sortDirection.value === 'asc' ? Bars3BottomLeftIcon : Bars3BottomRightIcon
 }
 
 const getNodeStatusColor = (status) => {
