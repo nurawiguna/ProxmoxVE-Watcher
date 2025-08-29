@@ -36,15 +36,68 @@
       </div>
     </div>
 
+    <!-- Sort controls -->
+    <div class="flex items-center space-x-3">
+      <span class="text-sm text-gray-600 font-medium">Sort by:</span>
+      <button
+        @click="toggleSort('name')"
+        :class="[
+          'flex items-center space-x-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+          sortField === 'name' 
+            ? 'bg-blue-100 text-blue-700 border border-blue-300' 
+            : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300'
+        ]"
+        title="Sort by name"
+      >
+        <span>Name</span>
+        <component
+          :is="getSortIconComponent('name')"
+          class="h-4 w-4"
+        />
+      </button>
+      <button
+        @click="toggleSort('vmid')"
+        :class="[
+          'flex items-center space-x-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+          sortField === 'vmid' 
+            ? 'bg-blue-100 text-blue-700 border border-blue-300' 
+            : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300'
+        ]"
+        title="Sort by container ID"
+      >
+        <span>ID</span>
+        <component
+          :is="getSortIconComponent('vmid')"
+          class="h-4 w-4"
+        />
+      </button>
+      <button
+        @click="toggleSort('uptime')"
+        :class="[
+          'flex items-center space-x-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+          sortField === 'uptime' 
+            ? 'bg-blue-100 text-blue-700 border border-blue-300' 
+            : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300'
+        ]"
+        title="Sort by uptime"
+      >
+        <span>Uptime</span>
+        <component
+          :is="getSortIconComponent('uptime')"
+          class="h-4 w-4"
+        />
+      </button>
+    </div>
+
     <!-- Containers List -->
     <div class="card">
       <div class="card-header">
         <h2 class="text-lg font-semibold text-gray-900">
-          Containers ({{ filteredContainers.length }})
+          Containers ({{ sortedFilteredContainers.length }})
         </h2>
       </div>
       <div class="card-body">
-        <VMList :vms="filteredContainers" />
+        <VMList :vms="sortedFilteredContainers" />
       </div>
     </div>
   </div>
@@ -53,12 +106,15 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useProxmoxStore } from '@/stores/proxmox'
+import { useSorting } from '@/composables/useSorting'
 import VMList from '@/components/VMList.vue'
 import {
   MagnifyingGlassIcon,
   ListBulletIcon,
   PlayIcon,
   StopIcon,
+  Bars3BottomLeftIcon,
+  Bars3BottomRightIcon,
 } from '@heroicons/vue/24/outline'
 
 const proxmoxStore = useProxmoxStore()
@@ -72,7 +128,10 @@ const statusFilters = [
 ]
 
 const filteredContainers = computed(() => {
-  let containers = proxmoxStore.containers
+  let containers = proxmoxStore.containers.map(container => ({
+    ...container,
+    name: container.name || `LXC ${container.vmid}`
+  }))
   
   // Apply search filter
   if (searchQuery.value) {
@@ -91,6 +150,17 @@ const filteredContainers = computed(() => {
   
   return containers
 })
+
+// Sorting functionality
+const { sortedData: sortedFilteredContainers, sortField, sortDirection, toggleSort } = useSorting(filteredContainers, 'name', 'asc')
+
+// Get sort icon component based on current sort state
+const getSortIconComponent = (field) => {
+  if (sortField.value === field) {
+    return sortDirection.value === 'asc' ? Bars3BottomLeftIcon : Bars3BottomRightIcon
+  }
+  return Bars3BottomLeftIcon
+}
 
 const setStatusFilter = (filter) => {
   statusFilter.value = filter

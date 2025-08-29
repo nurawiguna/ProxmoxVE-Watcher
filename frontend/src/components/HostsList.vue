@@ -1,14 +1,38 @@
 <template>
   <div class="space-y-4">
-    <!-- Search input -->
-    <div class="relative">
-      <MagnifyingGlassIcon class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-      <input
-        v-model="searchQuery"
-        type="text"
-        placeholder="Search nodes/baremetal servers..."
-        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-sm"
-      />
+    <!-- Search and Sort controls -->
+    <div class="flex flex-col sm:flex-row gap-3">
+      <!-- Search input -->
+      <div class="relative flex-1">
+        <MagnifyingGlassIcon class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <input
+          v-model="searchQuery"
+          type="text"
+          placeholder="Search nodes/baremetal servers..."
+          class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-sm"
+        />
+      </div>
+      
+      <!-- Sort controls -->
+      <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-600 font-medium">Sort:</span>
+        <button
+          @click="toggleSort('node')"
+          :class="[
+            'flex items-center space-x-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+            sortField === 'node' 
+              ? 'bg-blue-100 text-blue-700 border border-blue-300' 
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300'
+          ]"
+          title="Sort by name"
+        >
+          <span>Name</span>
+          <component
+            :is="getSortIconComponent()"
+            class="h-4 w-4"
+          />
+        </button>
+      </div>
     </div>
 
     <!-- Nodes list -->
@@ -24,7 +48,7 @@
       </div>
       
       <div
-        v-for="node in filteredNodes"
+        v-for="node in sortedFilteredNodes"
         :key="`${node.host_id}-${node.node}`"
         :class="[
           'border rounded-lg p-4 transition-all cursor-pointer',
@@ -91,10 +115,13 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useProxmoxStore } from '@/stores/proxmox'
+import { useSorting } from '@/composables/useSorting'
 import { formatBytes, formatPercentage, capitalize } from '@/utils/formatters'
 import {
   ServerIcon,
   MagnifyingGlassIcon,
+  Bars3BottomLeftIcon,
+  Bars3BottomRightIcon,
 } from '@heroicons/vue/24/outline'
 
 const proxmoxStore = useProxmoxStore()
@@ -112,6 +139,14 @@ const filteredNodes = computed(() => {
     node.host_name?.toLowerCase().includes(query)
   )
 })
+
+// Sorting functionality
+const { sortedData: sortedFilteredNodes, sortField, sortDirection, toggleSort } = useSorting(filteredNodes, 'node', 'asc')
+
+// Get sort icon component based on current sort state
+const getSortIconComponent = () => {
+  return sortDirection.value === 'asc' ? Bars3BottomLeftIcon : Bars3BottomRightIcon
+}
 
 const getNodeStatusColor = (status) => {
   switch (status?.toLowerCase()) {
