@@ -8,15 +8,32 @@
     <div
       v-for="node in proxmoxStore.nodes"
       :key="`${node.host_id}-${node.node}`"
-      class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+      :class="[
+        'border rounded-lg p-4 transition-all cursor-pointer',
+        isNodeSelected(node) 
+          ? 'border-blue-500 bg-blue-50 shadow-md' 
+          : 'border-gray-200 hover:shadow-md hover:border-gray-300'
+      ]"
+      @click="selectNode(node)"
     >
       <!-- Node header -->
       <div class="flex items-center justify-between mb-3">
         <div class="flex items-center space-x-3">
           <div :class="getNodeStatusColor(node.status)" class="w-3 h-3 rounded-full"></div>
           <div>
-            <h3 class="font-semibold text-gray-900">{{ node.node }}</h3>
+            <h3 class="font-semibold text-gray-900 flex items-center">
+              {{ node.node }}
+              <span v-if="isNodeSelected(node)" class="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                Selected
+              </span>
+            </h3>
             <p class="text-sm text-gray-500">{{ node.host_name }}</p>
+            <p v-if="isNodeSelected(node)" class="text-xs text-blue-600 mt-1">
+              Click to show all VMs
+            </p>
+            <p v-else class="text-xs text-gray-400 mt-1">
+              Click to filter VMs from this server
+            </p>
           </div>
         </div>
         
@@ -156,5 +173,26 @@ const extractPVEVersion = (pveversion) => {
   // Extract version number from string like "pve-manager/8.0.3/bbf3993334bfa916"
   const match = pveversion.match(/\/(\d+\.\d+\.\d+)\//)
   return match ? match[1] : pveversion
+}
+
+const selectNode = (node) => {
+  if (isNodeSelected(node)) {
+    // If already selected, deselect it
+    proxmoxStore.clearNodeFilter()
+  } else {
+    // Select the node
+    proxmoxStore.setSelectedNodeFilter({
+      host_id: node.host_id,
+      node: node.node,
+      host_name: node.host_name
+    })
+  }
+}
+
+const isNodeSelected = (node) => {
+  const selected = proxmoxStore.selectedNodeFilter
+  return selected && 
+         selected.host_id === node.host_id && 
+         selected.node === node.node
 }
 </script>

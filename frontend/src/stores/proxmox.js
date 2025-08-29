@@ -13,6 +13,7 @@ export const useProxmoxStore = defineStore('proxmox', () => {
   const lastUpdated = ref(null)
   const searchQuery = ref('')
   const selectedHostId = ref(null)
+  const selectedNodeFilter = ref(null) // For filtering VMs by selected node
   const expandedNodes = ref(new Set())
   const filters = ref({
     status: 'all', // all, running, stopped
@@ -47,6 +48,14 @@ export const useProxmoxStore = defineStore('proxmox', () => {
 
   const filteredVMs = computed(() => {
     let filtered = [...vms.value, ...containers.value]
+    
+    // Apply node filter first (if a specific node is selected)
+    if (selectedNodeFilter.value) {
+      filtered = filtered.filter(item => 
+        item.node === selectedNodeFilter.value.node && 
+        item.host_id === selectedNodeFilter.value.host_id
+      )
+    }
     
     // Apply search filter
     if (searchQuery.value) {
@@ -318,6 +327,15 @@ export const useProxmoxStore = defineStore('proxmox', () => {
       type: 'all',
     }
     searchQuery.value = ''
+    selectedNodeFilter.value = null
+  }
+
+  const setSelectedNodeFilter = (node) => {
+    selectedNodeFilter.value = node
+  }
+
+  const clearNodeFilter = () => {
+    selectedNodeFilter.value = null
   }
 
   return {
@@ -330,6 +348,7 @@ export const useProxmoxStore = defineStore('proxmox', () => {
     lastUpdated,
     searchQuery,
     selectedHostId,
+    selectedNodeFilter,
     expandedNodes,
     filters,
     
@@ -364,5 +383,7 @@ export const useProxmoxStore = defineStore('proxmox', () => {
     setSearchQuery,
     setFilter,
     resetFilters,
+    setSelectedNodeFilter,
+    clearNodeFilter,
   }
 })

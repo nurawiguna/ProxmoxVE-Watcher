@@ -178,6 +178,9 @@
             <h2 class="text-lg font-semibold text-gray-900 flex items-center">
               <ComputerDesktopIcon class="h-5 w-5 mr-2 text-blue-600" />
               Virtual Machines & Containers
+              <span v-if="proxmoxStore.selectedNodeFilter" class="ml-2 text-sm font-normal text-gray-600">
+                ({{ proxmoxStore.selectedNodeFilter.host_name }} - {{ proxmoxStore.selectedNodeFilter.node }})
+              </span>
             </h2>
             <button
               @click="vmsVisible = !vmsVisible"
@@ -189,6 +192,24 @@
         </div>
         
         <div class="card-body" v-show="vmsVisible">
+          <!-- Node Filter Info -->
+          <div v-if="proxmoxStore.selectedNodeFilter" class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <ServerIcon class="h-5 w-5 text-blue-600" />
+                <span class="text-sm font-medium text-blue-900">
+                  Showing VMs from: {{ proxmoxStore.selectedNodeFilter.host_name }} - {{ proxmoxStore.selectedNodeFilter.node }}
+                </span>
+              </div>
+              <button
+                @click="proxmoxStore.clearNodeFilter()"
+                class="text-sm text-blue-600 hover:text-blue-800 font-medium"
+              >
+                Show All VMs
+              </button>
+            </div>
+          </div>
+          
           <!-- Filters -->
           <div class="flex flex-wrap gap-2 mb-4">
             <button
@@ -205,7 +226,7 @@
             </button>
           </div>
           
-          <VMList :vms="filteredVMs" />
+          <VMList :vms="proxmoxStore.filteredVMs" />
         </div>
       </div>
     </div>
@@ -245,30 +266,12 @@ const statusFilters = [
 ]
 
 // Computed properties
-const filteredVMs = computed(() => {
-  let vms = [...proxmoxStore.vms, ...proxmoxStore.containers]
-  
-  // Apply search filter
-  if (searchQuery.value) {
-    const query = searchQuery.value.toLowerCase()
-    vms = vms.filter(vm =>
-      vm.name?.toLowerCase().includes(query) ||
-      vm.vmid?.toString().includes(query) ||
-      vm.node?.toLowerCase().includes(query)
-    )
-  }
-  
-  // Apply status filter
-  if (statusFilter.value !== 'all') {
-    vms = vms.filter(vm => vm.status === statusFilter.value)
-  }
-  
-  return vms
-})
+// (removed local filteredVMs - now using proxmoxStore.filteredVMs)
 
 // Methods
 const setStatusFilter = (filter) => {
   statusFilter.value = filter
+  proxmoxStore.setFilter('status', filter)
 }
 
 // Watch search query and update store
