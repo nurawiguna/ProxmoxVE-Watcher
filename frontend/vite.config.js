@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
     },
   },
   server: {
-    port: 3000,
+    port: env.PORT,
     open: true,
     cors: true,
     proxy: {
