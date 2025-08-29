@@ -390,8 +390,10 @@ const isNodeExpanded = (node) => {
 
 const extractPVEVersion = (pveversion) => {
   if (!pveversion) return null
-  // Extract version number from string like "pve-manager/8.0.3/bbf3993334bfa916"
-  const match = pveversion.match(/\/(\d+\.\d+\.\d+)\//)
+  // Extract version number from strings like:
+  // "pve-manager/8.0.3/bbf3993334bfa916" -> "8.0.3"
+  // "pve-manager/7.3-3/c3928077" -> "7.3-3"
+  const match = pveversion.match(/\/(\d+\.\d+[\.\-]\d+)\//)
   return match ? match[1] : pveversion
 }
 </script>
