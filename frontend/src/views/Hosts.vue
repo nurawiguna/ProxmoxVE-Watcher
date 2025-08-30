@@ -18,10 +18,46 @@
         class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
       />
     </div>
+    <!-- Sort controls -->
+      <div class="flex items-center space-x-3">
+        <span class="text-sm text-gray-600 font-medium">Sort by:</span>
+        <button
+          @click="toggleSort('name')"
+          :class="[
+            'flex items-center space-x-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+            sortField === 'name' 
+              ? 'bg-blue-100 text-blue-700 border border-blue-300' 
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300'
+          ]"
+          title="Sort by name"
+        >
+          <span>Name</span>
+          <component
+            :is="getSortIconComponent('name')"
+            class="h-4 w-4"
+          />
+        </button>
+        <button
+          @click="toggleSort('uptime')"
+          :class="[
+            'flex items-center space-x-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+            sortField === 'uptime' 
+              ? 'bg-blue-100 text-blue-700 border border-blue-300' 
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300'
+          ]"
+          title="Sort by uptime"
+        >
+          <span>Uptime</span>
+          <component
+            :is="getSortIconComponent('uptime')"
+            class="h-4 w-4"
+          />
+        </button>
+      </div>
 
     <!-- Hosts list -->
     <div class="space-y-6">
-      <div v-if="filteredHosts.length === 0 && searchQuery" class="text-center py-12">
+      <div v-if="sortedFilteredHosts.length === 0 && searchQuery" class="text-center py-12">
         <ServerIcon class="h-16 w-16 text-gray-400 mx-auto mb-4" />
         <h3 class="text-lg font-medium text-gray-900 mb-2">No hosts found</h3>
         <p class="text-gray-500">No hosts or nodes found matching "{{ searchQuery }}"</p>
@@ -35,7 +71,7 @@
 
       <!-- Host details with nodes -->
       <div
-        v-for="host in filteredHosts"
+        v-for="host in sortedFilteredHosts"
         :key="host.id"
         class="space-y-4"
       >
@@ -263,6 +299,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useProxmoxStore } from '@/stores/proxmox'
+import { useSorting } from '@/composables/useSorting'
 import { formatBytes, formatPercentage, formatUptime, capitalize } from '@/utils/formatters'
 import { 
   ServerIcon, 
@@ -270,7 +307,9 @@ import {
   CpuChipIcon,
   CircleStackIcon,
   ComputerDesktopIcon,
-  MagnifyingGlassIcon
+  MagnifyingGlassIcon,
+  Bars3BottomLeftIcon,
+  Bars3BottomRightIcon,
 } from '@heroicons/vue/24/outline'
 
 const proxmoxStore = useProxmoxStore()
@@ -300,6 +339,17 @@ const filteredHosts = computed(() => {
     return hostMatches || nodeMatches
   })
 })
+
+// Sorting functionality
+const { sortedData: sortedFilteredHosts, sortField, sortDirection, toggleSort } = useSorting(filteredHosts, 'name', 'asc')
+
+// Get sort icon component based on current sort state
+const getSortIconComponent = (field) => {
+  if (sortField.value === field) {
+    return sortDirection.value === 'asc' ? Bars3BottomLeftIcon : Bars3BottomRightIcon
+  }
+  return Bars3BottomLeftIcon
+}
 
 // Filter nodes for a specific host based on search query
 const getFilteredHostNodes = (hostId) => {
