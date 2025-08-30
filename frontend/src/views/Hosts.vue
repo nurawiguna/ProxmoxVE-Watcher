@@ -38,21 +38,21 @@
           />
         </button>
         <button
-        @click="toggleSort('uptime')"
-        :class="[
-          'flex items-center space-x-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
-          sortField === 'uptime' 
-            ? 'bg-blue-100 text-blue-700 border border-blue-300' 
-            : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300'
-        ]"
-        title="Sort by uptime"
-      >
-        <span>Uptime</span>
-        <component
-          :is="getSortIconComponent('uptime')"
-          class="h-4 w-4"
-        />
-      </button>
+          @click="toggleSort('uptime')"
+          :class="[
+            'flex items-center space-x-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+            sortField === 'uptime' 
+              ? 'bg-blue-100 text-blue-700 border border-blue-300' 
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300'
+          ]"
+          title="Sort by uptime"
+        >
+          <span>Uptime</span>
+          <component
+            :is="getSortIconComponent('uptime')"
+            class="h-4 w-4"
+          />
+        </button>
       </div>
 
     <!-- Hosts list -->
