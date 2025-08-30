@@ -4,6 +4,7 @@ from proxmoxer import ProxmoxAPI
 import os
 from dotenv import load_dotenv
 import json
+import logging
 
 load_dotenv()
 
@@ -17,6 +18,14 @@ def load_proxmox_hosts():
             return json.load(f)
     except FileNotFoundError:
         return []
+
+def handle_permission_error(error_msg):
+    """Handle permission errors with consistent response format"""
+    return jsonify({
+        'error': 'Permission denied',
+        'message': error_msg,
+        'suggestion': 'Please check your Proxmox credentials and permissions'
+    }), 403
 
 def get_proxmox_connection(host_config):
     try:
@@ -337,6 +346,24 @@ def test_connection(host_id):
                 "Check firewall settings"
             ]
         }), 500
+
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    """Health check endpoint"""
+    try:
+        # Basic health check - ensure the app is running
+        return jsonify({
+            "status": "healthy",
+            "timestamp": os.environ.get('BUILD_TIME', 'unknown'),
+            "version": "1.0.0",
+            "service": "proxmoxve-watcher-backend"
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "status": "unhealthy",
+            "error": str(e),
+            "service": "proxmoxve-watcher-backend"
+        }), 503
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000) 
