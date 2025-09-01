@@ -84,7 +84,7 @@ health_check() {
     sleep 30
     
     # Check api health
-    if curl -f http://localhost:5000/api/health > /dev/null 2>&1; then
+    if curl -f http://localhost/api/health > /dev/null 2>&1; then
         print_success "API is healthy"
     else
         print_warning "API health check failed"
