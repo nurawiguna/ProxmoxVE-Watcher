@@ -29,6 +29,13 @@ Thumbs.db
 logs
 *.log
 
+# Docker volumes and backups
+backups/
+docker-volumes/
+
+# Make temporary files
+.make/
+
 # Temporary files
 .tmp/
 .temp/

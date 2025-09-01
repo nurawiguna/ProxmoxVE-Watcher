@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // Create axios instance with default configuration
 const apiClient = axios.create({
-  baseURL: '/api', // Will be proxied to backend by Vite
+  baseURL: '/api', // Will be proxied to API by Vite
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
-# Proxmox Dashboard
+# ProxmoxVE Watcher
 
-A modern, responsive web dashboard for managing and monitoring Proxmox Virtual Environment (PVE) infrastructure. Built with Python Flask backend and vanilla JavaScript frontend.
+A modern, responsive web dashboard for managing and monitoring Proxmox Virtual Environment (PVE) infrastructure. Built with Vue.js frontend and Python Flask api.
 
 ## ⚡ Built with [Cursor AI](https://cursor.sh/) · Design Inspired by [Claude AI](https://claude.ai)
 
@@ -9,25 +9,41 @@ This project was **designed with inspiration from [Claude AI](https://claude.ai)
 ## 🌟 Features
 
 - **Real-time Monitoring**: View all VMs and containers across multiple Proxmox hosts
-- **Interactive Dashboard**: Search, filter, and manage your virtual infrastructure
-- **Responsive Design**: Modern glass-morphism UI that works on all devices
+- **Interactive Dashboard**: Search, filter, and sort your virtual infrastructure
 - **Multi-Node Support**: Monitor multiple Proxmox clusters from a single dashboard
-- **Resource Overview**: Quick stats on CPU, RAM, storage, and system status
-- **Easy Deployment**: Simple setup with Python and static file serving
+- **Advanced Sorting**: Sort by name, ID, uptime, and status across all views
+- **Node Selection**: Filter resources by specific Proxmox nodes
+- **Responsive Design**: Modern UI with Tailwind CSS that works on all devices
+- **Docker Support**: Easy deployment with Docker and Docker Compose
+- **Resource Overview**: Detailed stats on CPU, RAM, storage, and system status
+
+## 🚀 Quick Start
+
+### Option 1: Docker (Recommended)
+
+The fastest way to get started is using Docker:
+
+```bash
+# Clone the repository
+git clone https://github.com/nurawiguna/ProxmoxVE-Watcher
+cd ProxmoxVE-Watcher
+
+# Quick start with the helper script
+./docker-start.sh
+
+# Or manually with docker-compose
+docker-compose up -d
+```
+
+**👉 For detailed Docker setup instructions, see [DOCKER.md](DOCKER.md)**
+
+### Option 2: Manual Setup
 
 ## 📋 Requirements
 - **Python 3.10+** (tested on 3.10.0)
-- **pip** (Python package manager)
-- **Python packages:**
-  - Flask (2.0.1 or newer)
-  - Flask-CORS (3.0.10 or newer)
-  - proxmoxer (1.3.1 or newer)
-  - python-dotenv (0.19.0 or newer)
-- **Frontend static server:**
-  - Python's built-in HTTP server (`python3 -m http.server`) is supported and available
-  - (Optional) Node.js (v20.5.0 or newer) if you want to use other static servers
-
-## 🚀 Quick Start
+- **Node.js 18+** (for frontend development)
+- **Python packages:** Flask, Flask-CORS, proxmoxer, python-dotenv
+- **Node packages:** Vue 3, Vite, Tailwind CSS, Pinia
 
 ### 1. Clone the Repository
 ```bash
@@ -37,20 +53,20 @@ cd proxmox-watcher
 
 ### 2. Backend Setup (with Python Virtual Environment)
 ```bash
-cd backend
+cd api
 python3 -m venv venv
 source venv/bin/activate  # On Windows use: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
 #### Configure Proxmox Hosts
-Edit `backend/proxmox_hosts.json` and add your Proxmox hosts (see example in file).
+Edit `api/proxmox_hosts.json` and add your Proxmox hosts (see example in file).
 
 ### 3. Run the Backend
 ```bash
 python app.py
 ```
-- The backend runs at [http://localhost:5000](http://localhost:5000)
+- The api runs at [http://localhost:5000](http://localhost:5000)
 
 ### 4. Frontend Setup & Run
 ```bash

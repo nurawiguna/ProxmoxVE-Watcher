@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-echo "🚀 Starting ProxmoxVE Watcher Backend with Gunicorn! 🐍"
+echo "🚀 Starting ProxmoxVE Watcher API with Gunicorn! 🐍"
 echo "🔗 Listening on http://0.0.0.0:5000"
 echo "👤 Running as user: $(whoami)"
 

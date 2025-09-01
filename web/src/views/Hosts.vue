@@ -66,7 +66,7 @@
       <div v-else-if="proxmoxStore.hosts.length === 0" class="text-center py-12">
         <ServerIcon class="h-16 w-16 text-gray-400 mx-auto mb-4" />
         <h3 class="text-lg font-medium text-gray-900 mb-2">No hosts configured</h3>
-        <p class="text-gray-500">Configure your Proxmox VE hosts in the backend configuration.</p>
+        <p class="text-gray-500">Configure your Proxmox VE hosts in the api configuration.</p>
       </div>
 
       <!-- Host details with nodes -->

@@ -19,10 +19,10 @@ COPY app.py /app/
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
-    && adduser -D -h /app appuser_be \
-    && chown -R appuser_be:appuser_be /app
+    && adduser -D -h /app appuser_api \
+    && chown -R appuser_api:appuser_api /app
 
-USER appuser_be
+USER appuser_api
 
 EXPOSE 5000
 
