@@ -1,0 +1,43 @@
+{
+  "name": "proxmoxve-watcher-web",
+  "version": "1.0.0",
+  "description": "Modern Web for Proxmox VE Watcher",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .js,.jsx --fix",
+    "format": "prettier --write .",
+    "setup": "npm install && npm run build"
+  },
+  "keywords": [
+    "proxmox",
+    "vue",
+    "vite",
+    "dashboard"
+  ],
+  "author": "nurawiguna",
+  "license": "MIT",
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.0",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-vue": "^9.19.2",
+    "postcss": "^8.4.32",
+    "prettier": "^3.2.5",
+    "tailwindcss": "^3.4.0",
+    "terser": "^5.43.1",
+    "vite": "^5.4.19"
+  },
+  "dependencies": {
+    "@headlessui/vue": "^1.7.16",
+    "@heroicons/vue": "^2.0.18",
+    "axios": "^1.6.5",
+    "pinia": "^2.1.7",
+    "vue": "^3.4.0",
+    "vue-router": "^4.2.5"
+  }
+}
