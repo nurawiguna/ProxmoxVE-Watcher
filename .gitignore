@@ -1,3 +1,7 @@
-backend/proxmox_hosts.json
-.vscode
-backend/venv
+.vscode/
+api/__pycache__/
+api/venv/
+
+api/proxmox_hosts.json
+
+*.DS_Store
