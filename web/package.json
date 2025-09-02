@@ -1,7 +1,7 @@
 {
-  "name": "proxmox-ve-watcher-frontend",
+  "name": "proxmoxve-watcher-web",
   "version": "1.0.0",
-  "description": "Modern frontend for Proxmox VE Watcher",
+  "description": "Modern Web for Proxmox VE Watcher",
   "main": "src/index.js",
   "type": "module",
   "scripts": {

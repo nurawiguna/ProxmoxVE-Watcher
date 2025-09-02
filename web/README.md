@@ -33,7 +33,7 @@ A modern, responsive Vue.js frontend for managing and monitoring Proxmox VE virt
 ### Prerequisites
 
 - Node.js 18+ and npm
-- Backend API running on port 5000
+- API running on port 5000
 
 ### Installation
 
@@ -58,7 +58,7 @@ npm run dev
 
 The development server runs on `http://localhost:3000` and includes:
 - Hot module replacement
-- Automatic proxy to backend API
+- Automatic proxy to API
 - Source maps for debugging
 - Fast refresh for Vue components
 
@@ -86,7 +86,7 @@ frontend/
 
 ### Environment Variables
 
-- `API_BASE_URL` - Backend API URL
+- `API_BASE_URL` - API URL
 - `APP_TITLE` - Application title
 - `VITE_APP_VERSION` - Application version
 
@@ -101,7 +101,7 @@ The Vite configuration includes:
 
 ## API Integration
 
-The frontend communicates with the backend through REST API endpoints:
+The frontend communicates with the api through REST API endpoints:
 - `/api/hosts` - Host management
 - `/api/all` - All resources data
 - `/api/hosts/{hostId}/nodes/{node}/vms/{vmid}/{action}` - VM control

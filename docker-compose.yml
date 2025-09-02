@@ -1,0 +1,93 @@
+# Production Docker Compose Configuration
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+      args:
+        - FLASK_ENV=production
+    image: proxmoxve-watcher-api
+    container_name: proxmoxve-watcher-api
+    environment:
+      - FLASK_ENV=production
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    volumes:
+      - ./api/proxmox_hosts.json:/app/proxmox_hosts.json:ro
+    expose:
+      - "5000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - proxmoxve-watcher-network
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    image: proxmoxve-watcher-web
+    container_name: proxmoxve-watcher-web
+    environment:
+      - NODE_ENV=production
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    ports:
+      - "80:80"
+      - "443:443"  # For SSL/TLS
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/log/nginx
+      - /var/run
+    networks:
+      - proxmoxve-watcher-network
+
+  # Optional: Reverse proxy with SSL termination
+  # nginx-proxy:
+  #   image: nginxproxy/nginx-proxy:alpine
+  #   container_name: nginx-proxy
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - /var/run/docker.sock:/tmp/docker.sock:ro
+  #     - ./certs:/etc/nginx/certs:ro
+  #     - ./vhost.d:/etc/nginx/vhost.d
+  #     - ./html:/usr/share/nginx/html
+  #   networks:
+  #     - proxmoxve-watcher-network
+  #   restart: unless-stopped
+
+# volumes:
+#   api_logs:
+#     driver: local
+
+networks:
+  proxmoxve-watcher-network:
+    driver: bridge
+    name: proxmoxve-watcher-network
