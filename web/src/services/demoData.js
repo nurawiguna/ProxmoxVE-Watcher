@@ -285,7 +285,7 @@ export const demoContainers = [
     maxdisk: 32212254720, // 30GB
     pid: 4567,
     uptime: 432000, // 5 days
-    node: 'proxmox-backup',
+    node: 'proxmox-backup-01',
     hostId: 'demo-host-3',
     template: 0,
     tags: 'logging,utility',
