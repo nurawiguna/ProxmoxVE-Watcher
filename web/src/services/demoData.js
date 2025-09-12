@@ -330,23 +330,35 @@ export const demoSummary = {
 
 // Simulate realistic variations for auto-refresh
 export const generateVariations = () => {
+  // Deep copy the demo data arrays to avoid mutating the originals
+  const nodes = structuredClone(demoNodes);
+  const vms = structuredClone(demoVMs);
+  const containers = structuredClone(demoContainers);
+
   // Add small random variations to CPU usage and memory
-  demoNodes.forEach(node => {
-    node.cpu = Math.max(0, Math.min(1, node.cpu + (Math.random() - 0.5) * 0.05))
-    node.mem = Math.max(0, Math.min(node.maxmem, node.mem + (Math.random() - 0.5) * node.maxmem * 0.02))
-  })
+  nodes.forEach(node => {
+    node.cpu = Math.max(0, Math.min(1, node.cpu + (Math.random() - 0.5) * 0.05));
+    node.mem = Math.max(0, Math.min(node.maxmem, node.mem + (Math.random() - 0.5) * node.maxmem * 0.02));
+  });
 
-  demoVMs.forEach(vm => {
+  vms.forEach(vm => {
     if (vm.status === 'running') {
-      vm.cpu = Math.max(0, Math.min(1, vm.cpu + (Math.random() - 0.5) * 0.1))
-      vm.mem = Math.max(0, Math.min(vm.maxmem, vm.mem + (Math.random() - 0.5) * vm.maxmem * 0.05))
+      vm.cpu = Math.max(0, Math.min(1, vm.cpu + (Math.random() - 0.5) * 0.1));
+      vm.mem = Math.max(0, Math.min(vm.maxmem, vm.mem + (Math.random() - 0.5) * vm.maxmem * 0.05));
     }
-  })
+  });
 
-  demoContainers.forEach(ct => {
+  containers.forEach(ct => {
     if (ct.status === 'running') {
-      ct.cpu = Math.max(0, Math.min(1, ct.cpu + (Math.random() - 0.5) * 0.08))
-      ct.mem = Math.max(0, Math.min(ct.maxmem, ct.mem + (Math.random() - 0.5) * ct.maxmem * 0.03))
+      ct.cpu = Math.max(0, Math.min(1, ct.cpu + (Math.random() - 0.5) * 0.08));
+      ct.mem = Math.max(0, Math.min(ct.maxmem, ct.mem + (Math.random() - 0.5) * ct.maxmem * 0.03));
     }
-  })
+  });
+
+  // Return the updated arrays
+  return {
+    nodes,
+    vms,
+    containers
+  };
 }
