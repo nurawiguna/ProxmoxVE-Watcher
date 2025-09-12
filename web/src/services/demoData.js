@@ -192,7 +192,7 @@ export const demoVMs = [
     maxdisk: 1073741824000, // 1TB
     pid: 3456,
     uptime: 86400, // 1 day
-    node: 'proxmox-backup',
+    node: 'proxmox-backup-01',
     hostId: 'demo-host-3',
     template: 0,
     tags: 'backup,utility',
