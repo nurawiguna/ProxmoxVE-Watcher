@@ -6,8 +6,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:demo": "vite --mode demo",
     "build": "vite build",
+    "build:demo": "vite build --mode production.demo",
     "preview": "vite preview",
+    "preview:demo": "vite build --mode production.demo && vite preview",
     "lint": "eslint . --ext .js,.jsx --fix",
     "format": "prettier --write .",
     "setup": "npm install && npm run build"

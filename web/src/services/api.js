@@ -1,4 +1,8 @@
 import axios from 'axios'
+import { demoApi } from './demoApi.js'
+
+// Check if we're in demo mode
+const isDemoMode = import.meta.env.VITE_DEMO_MODE === 'true'
 
 // Create axios instance with default configuration
 const apiClient = axios.create({
@@ -42,10 +46,14 @@ apiClient.interceptors.response.use(
 // API endpoints
 export const proxmoxApi = {
   // Hosts endpoints
-  getHosts: () => apiClient.get('/hosts'),
+  getHosts: () => isDemoMode ? demoApi.getHosts() : apiClient.get('/hosts'),
   
   // Data endpoints
   getAllData: async () => {
+    if (isDemoMode) {
+      return demoApi.getAllData()
+    }
+    
     try {
       console.log('getAllData: Starting to fetch all data')
       // Get hosts first
@@ -119,6 +127,10 @@ export const proxmoxApi = {
     }
   },
   getNodes: async () => {
+    if (isDemoMode) {
+      return demoApi.getNodes()
+    }
+    
     const hostsResponse = await apiClient.get('/hosts')
     const hosts = hostsResponse.data
     const allNodes = []
@@ -135,6 +147,10 @@ export const proxmoxApi = {
     return { data: allNodes }
   },
   getVMs: async () => {
+    if (isDemoMode) {
+      return demoApi.getVMs()
+    }
+    
     const hostsResponse = await apiClient.get('/hosts')
     const hosts = hostsResponse.data
     const allVMs = []
@@ -160,6 +176,10 @@ export const proxmoxApi = {
     return { data: allVMs }
   },
   getContainers: async () => {
+    if (isDemoMode) {
+      return demoApi.getContainers()
+    }
+    
     const hostsResponse = await apiClient.get('/hosts')
     const hosts = hostsResponse.data
     const allContainers = []
@@ -186,22 +206,22 @@ export const proxmoxApi = {
   },
   
   // Node specific endpoints
-  getNodeVMs: (hostId, node) => apiClient.get(`/hosts/${hostId}/nodes/${node}/vms`),
-  getNodeContainers: (hostId, node) => apiClient.get(`/hosts/${hostId}/nodes/${node}/containers`),
-  getNodeStatus: (hostId, node) => apiClient.get(`/hosts/${hostId}/nodes/${node}/status`),
+  getNodeVMs: (hostId, node) => isDemoMode ? demoApi.getNodeVMs(hostId, node) : apiClient.get(`/hosts/${hostId}/nodes/${node}/vms`),
+  getNodeContainers: (hostId, node) => isDemoMode ? demoApi.getNodeContainers(hostId, node) : apiClient.get(`/hosts/${hostId}/nodes/${node}/containers`),
+  getNodeStatus: (hostId, node) => isDemoMode ? demoApi.getNodeStatus(hostId, node) : apiClient.get(`/hosts/${hostId}/nodes/${node}/status`),
   
   // VM control endpoints
-  startVM: (hostId, node, vmid) => apiClient.post(`/hosts/${hostId}/nodes/${node}/vms/${vmid}/start`),
-  stopVM: (hostId, node, vmid) => apiClient.post(`/hosts/${hostId}/nodes/${node}/vms/${vmid}/stop`),
-  rebootVM: (hostId, node, vmid) => apiClient.post(`/hosts/${hostId}/nodes/${node}/vms/${vmid}/reboot`),
+  startVM: (hostId, node, vmid) => isDemoMode ? demoApi.startVM(hostId, node, vmid) : apiClient.post(`/hosts/${hostId}/nodes/${node}/vms/${vmid}/start`),
+  stopVM: (hostId, node, vmid) => isDemoMode ? demoApi.stopVM(hostId, node, vmid) : apiClient.post(`/hosts/${hostId}/nodes/${node}/vms/${vmid}/stop`),
+  rebootVM: (hostId, node, vmid) => isDemoMode ? demoApi.rebootVM(hostId, node, vmid) : apiClient.post(`/hosts/${hostId}/nodes/${node}/vms/${vmid}/reboot`),
   
   // Container control endpoints
-  startContainer: (hostId, node, vmid) => apiClient.post(`/hosts/${hostId}/nodes/${node}/containers/${vmid}/start`),
-  stopContainer: (hostId, node, vmid) => apiClient.post(`/hosts/${hostId}/nodes/${node}/containers/${vmid}/stop`),
-  rebootContainer: (hostId, node, vmid) => apiClient.post(`/hosts/${hostId}/nodes/${node}/containers/${vmid}/reboot`),
+  startContainer: (hostId, node, vmid) => isDemoMode ? demoApi.startContainer(hostId, node, vmid) : apiClient.post(`/hosts/${hostId}/nodes/${node}/containers/${vmid}/start`),
+  stopContainer: (hostId, node, vmid) => isDemoMode ? demoApi.stopContainer(hostId, node, vmid) : apiClient.post(`/hosts/${hostId}/nodes/${node}/containers/${vmid}/stop`),
+  rebootContainer: (hostId, node, vmid) => isDemoMode ? demoApi.rebootContainer(hostId, node, vmid) : apiClient.post(`/hosts/${hostId}/nodes/${node}/containers/${vmid}/reboot`),
   
   // Summary endpoints
-  getSummary: () => apiClient.get('/summary'),
+  getSummary: () => isDemoMode ? demoApi.getSummary() : apiClient.get('/summary'),
 }
 
 export default apiClient
