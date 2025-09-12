@@ -2,6 +2,7 @@
 
 A modern, responsive web dashboard for monitoring Proxmox Virtual Environment (VE) clusters. Built with Vue.js and featuring real-time data updates, detailed resource monitoring, and an intuitive user interface.
 
+
 ## ✨ Features
 
 - **Real-time Monitoring**: Live updates of VMs, containers, and node status
@@ -11,26 +12,18 @@ A modern, responsive web dashboard for monitoring Proxmox Virtual Environment (V
 - **Responsive Design**: Works on desktop, tablet, and mobile devices
 - **Demo Mode**: Preview the interface with realistic dummy data
 
-## 🚀 Demo
-
-🎯 **Try the live demo**: [proxmoxve-wathcer-dev.nspace.fyi] (Deploy using instructions below)
-
-The demo mode provides a fully functional preview with realistic dummy data showing:
-- 3 Proxmox hosts (3 online)
-- 3 nodes with realistic resource usage
-- 5 virtual machines with various states
-- 5 containers with different configurations
-- Live simulated data variations
 
 ## 📦 Installation
 
 ### Prerequisites
 
-- Python 3.8+
+- Python 3.10+ (tested on 3.10.0)
 - Node.js 18+
-- npm or yarn
+- npm
 
 ### Quick Start
+
+#### Manual  Setup
 
 1. **Clone the repository**
    ```bash
@@ -41,6 +34,8 @@ The demo mode provides a fully functional preview with realistic dummy data show
 2. **Backend Setup**
    ```bash
    cd api
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows use: venv\Scripts\activate
    pip install -r requirements.txt
    cp proxmox_hosts.json.example proxmox_hosts.json
    # Edit proxmox_hosts.json with your Proxmox credentials
@@ -59,6 +54,8 @@ The demo mode provides a fully functional preview with realistic dummy data show
    - Open http://localhost:3000 in your browser
 
 ## 🎭 Demo Mode
+
+This demo with data dummy
 
 ### Running Demo Locally
 
@@ -129,7 +126,7 @@ Just upload the contents of `web/dist/` after running `./build-demo.sh`.
 
 ```
 ProxmoxVE-Watcher/
-├── api/                     # Python Flask backend
+├── api/                    # Python Flask backend
 │   ├── app.py              # Main API application
 │   ├── requirements.txt    # Python dependencies
 │   └── proxmox_hosts.json  # Proxmox host configuration
@@ -139,47 +136,67 @@ ProxmoxVE-Watcher/
 │   │   ├── services/       # API and demo services
 │   │   ├── stores/         # Pinia state management
 │   │   └── views/          # Page components
-│   ├── .env.demo          # Demo mode environment
-│   └── package.json       # Frontend dependencies
-├── netlify.toml           # Netlify deployment config
-├── vercel.json           # Vercel deployment config
-└── build-demo.sh         # Demo build script
+│   ├── .env                # Environment variables
+│   ├── .env.production     # Environment variables for Production
+│   ├── .env.demo           # Demo mode environment
+│   └── package.json        # Frontend dependencies
+├── netlify.toml            # Netlify deployment config
+├── vercel.json             # Vercel deployment config
+└── build-demo.sh           # Demo build script
 ```
 
 ## ⚙️ Configuration
 
+
 ### Backend Configuration
 
-Edit `api/proxmox_hosts.json`:
+
+### 🔐 Permissions Setup (Proxmox)
+1. **Create a User** in Proxmox (Datacenter > Permissions > Users).
+2. **Create a Role** (if needed) with at least these privileges:
+   - `Sys.Audit`, `VM.Audit`, `VM.Monitor`
+3. **Assign Permissions**:
+   - Go to Datacenter > Permissions > Add
+   - Path: `/`
+   - User: your API user
+   - Role: your custom role or `PVEAdmin` (for testing)
+
+### Setup Proxmox Host into API
+Copy `api/proxmox_hosts.json.example` to `api/proxmox_hosts.json` then modify it as your server. example
 
 ```json
 [
   {
-    "id": "host1",
-    "name": "Proxmox Host 1",
-    "host": "192.168.1.100",
-    "port": 8006,
-    "user": "root@pam",
-    "password": "your-password",
-    "verify_ssl": false
-  }
+      "id": "1",
+      "name": "proxmox_host_1",
+      "host": "proxmox_host_1_ip",
+      "user": "user@pve",
+      "password": "password",
+      "verify_ssl": false,
+      "company": "company_name",
+      "site": "site_name"
+    }
 ]
 ```
 
 ### Environment Variables
 
-**Frontend (.env)**
-```env
-VITE_APP_TITLE=Proxmox VE - Watcher
-VITE_DEMO_MODE=false
-API_BASE_URL=http://127.0.0.1:5000
-```
+**Frontend (.env) for Development**
+
+- Copy `./web/.env.example` to `./web/.env`
+- Modify as you need 
 
 **Demo Mode (.env.demo)**
 ```env
 VITE_APP_TITLE=Proxmox VE - Watcher (Demo)
 VITE_DEMO_MODE=true
 ```
+
+**Frontend (.env.production) for Production**
+
+- Copy `./web/.env.production.example` to `./web/.env.production`
+- Modify as you need 
+
 
 ## 🛠️ Development
 
@@ -194,7 +211,6 @@ VITE_DEMO_MODE=true
 
 **Backend**
 - `python app.py` - Start API server
-- `DEMO_MODE=true python app.py` - Start with demo endpoints
 
 ### API Endpoints
 
@@ -202,8 +218,6 @@ VITE_DEMO_MODE=true
 - `GET /api/hosts/{id}/nodes` - Get nodes for a host
 - `GET /api/hosts/{id}/nodes/{node}/vms` - Get VMs for a node
 - `GET /api/hosts/{id}/nodes/{node}/containers` - Get containers for a node
-- `POST /api/hosts/{id}/nodes/{node}/vms/{vmid}/start` - Start VM
-- `POST /api/hosts/{id}/nodes/{node}/vms/{vmid}/stop` - Stop VM
 
 ## 🤝 Contributing
 
@@ -228,8 +242,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you have any questions or need help:
 - Open an [Issue](https://github.com/nurawiguna/ProxmoxVE-Watcher/issues)
-- Check the [Wiki](https://github.com/nurawiguna/ProxmoxVE-Watcher/wiki)
-- Contact: [your-email@example.com]
+- Contact: [nura@nspace.fyi](nura@nspace.fyi)
+- Support ME: [Nura Wiguna](https://coff.ee/nurawiguna)
+<p align="center">
+   <a href="https://coff.ee/nurawiguna">
+      <img src="https://cdn.buymeacoffee.com/buttons/v2/default-orange.png" height="50" width="210" alt="Buy Me A Coffee" />
+   </a>
+</p>
 
 ---
 
