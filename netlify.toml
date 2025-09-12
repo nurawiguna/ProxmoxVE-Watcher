@@ -1,0 +1,12 @@
+[build]
+    publish = "web/dist"
+    command = "cd web && npm ci && npm run build:demo"
+
+[build.environment]
+    NODE_VERSION = "18"
+    NPM_FLAGS = "--production=false"
+
+[[redirects]]
+    from = "/*"
+    to = "/index.html"
+    status = 200

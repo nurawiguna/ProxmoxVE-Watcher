@@ -4,6 +4,7 @@ import { resolve } from 'path'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
+  const isDemoMode = env.VITE_DEMO_MODE === 'true'
   
   return {
   plugins: [vue()],
@@ -13,16 +14,19 @@ export default defineConfig(({ mode }) => {
     },
   },
   server: {
-    port: env.PORT,
+    port: env.PORT || 3000,
     open: true,
     cors: true,
-    proxy: {
-      '/api': {
-        target: env.API_BASE_URL,
-        changeOrigin: true,
-        secure: false,
+    // Only add proxy if not in demo mode
+    ...(isDemoMode ? {} : {
+      proxy: {
+        '/api': {
+          target: env.API_BASE_URL,
+          changeOrigin: true,
+          secure: false,
+        },
       },
-    },
+    }),
   },
   build: {
     outDir: 'dist',
