@@ -59,7 +59,11 @@ build_application() {
         COMPOSE_CMD="docker-compose"
     fi
     
-    $COMPOSE_CMD -f docker-compose.yml build --no-cache
+    # Set environment variables to disable provenance and attestations
+    export DOCKER_BUILDKIT=1
+    export BUILDX_NO_DEFAULT_ATTESTATIONS=1
+    
+    $COMPOSE_CMD -f docker-compose.yml build --no-cache --parallel
     print_success "Docker images built successfully"
 }
 
