@@ -17,12 +17,12 @@ deploy: ## Deploy application
 
 build: ## Build images
 	@echo "🔨 Building images..."
-	docker-compose build
+	@export DOCKER_BUILDKIT=1 && export BUILDX_NO_DEFAULT_ATTESTATIONS=1 && docker-compose build --parallel
 	@echo "✅ Images built!"
 
 build-no-cache: ## Build images without cache
 	@echo "🔨 Building images without cache..."
-	docker-compose build --no-cache
+	@export DOCKER_BUILDKIT=1 && export BUILDX_NO_DEFAULT_ATTESTATIONS=1 && docker-compose build --no-cache --parallel
 	@echo "✅ Images built without cache!"
 
 up: ## Start application
@@ -62,15 +62,8 @@ stats: ## Show resource usage statistics
 clean: ## Clean up containers and images
 	@echo "🧹 Cleaning up containers and images..."
 	docker-compose down --remove-orphans
-	docker system prune -f
-	@echo "✅ Cleanup completed!"
-
-clean-all: ## Clean up everything (including volumes)
-	@echo "🧹 Cleaning up everything..."
-	docker-compose down --remove-orphans --volumes
 	docker system prune -af
-	docker volume prune -f
-	@echo "✅ Complete cleanup finished!"
+	@echo "✅ Cleanup completed!"
 
 # Restart commands
 restart: ## Restart all services

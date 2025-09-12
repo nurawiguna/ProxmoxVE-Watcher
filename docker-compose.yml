@@ -8,6 +8,9 @@ services:
       dockerfile: Dockerfile
       args:
         - FLASK_ENV=production
+      #   - BUILDKIT_INLINE_CACHE=1
+      # platforms:
+      #   - linux/amd64
     image: proxmoxve-watcher-api
     container_name: proxmoxve-watcher-api
     environment:
@@ -35,6 +38,10 @@ services:
     build:
       context: ./web
       dockerfile: Dockerfile
+      # args:
+      #   - BUILDKIT_INLINE_CACHE=1
+      # platforms:
+      #   - linux/amd64
     image: proxmoxve-watcher-web
     container_name: proxmoxve-watcher-web
     environment:

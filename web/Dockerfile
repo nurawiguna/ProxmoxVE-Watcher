@@ -1,6 +1,6 @@
 # Multi-stage build for Vue.js web - Production Ready
 # Stage 1: Build stage
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
 
 # Install dumb-init for signal handling
 RUN apk add --no-cache dumb-init
@@ -23,7 +23,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Production stage with nginx
-FROM nginx:1.27-alpine AS release
+FROM nginx:1.27-alpine-slim AS release
 
 # Install dumb-init for signal handling
 RUN apk add --no-cache dumb-init
