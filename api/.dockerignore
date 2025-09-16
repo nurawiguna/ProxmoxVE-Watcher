@@ -59,3 +59,6 @@ docker-compose*.yml
 # Documentation
 README.md
 docs/
+
+# Proxmox Hosts configuration
+proxmox_hosts.json

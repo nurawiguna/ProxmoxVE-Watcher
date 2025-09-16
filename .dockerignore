@@ -63,5 +63,6 @@ tests/
 
 # Scripts and utilities
 deploy.sh
+build-demo.sh
 health-check.sh
 Makefile
