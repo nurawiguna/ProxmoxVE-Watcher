@@ -187,10 +187,7 @@ Copy `api/proxmox_hosts.json.example` to `api/proxmox_hosts.json` then modify it
 - Modify as you need 
 
 **Demo Mode (.env.demo)**
-```env
-VITE_APP_TITLE=Proxmox VE - Watcher (Demo)
-VITE_DEMO_MODE=true
-```
+- Use .env.demo
 
 **Frontend (.env.production) for Production**
 
