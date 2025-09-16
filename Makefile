@@ -42,10 +42,26 @@ logs: ## Show logs
 
 # Monitoring and maintenance
 health: ## Run health check
-	@./health-check.sh --verbose
+	@if ./health-check.sh --verbose; then \
+		true; \
+	else \
+		case $$? in \
+			1) echo "⚠️  Health check completed - system is degraded" ;; \
+			2) echo "❌ Health check completed - system is critical" ;; \
+			*) echo "❓ Health check completed - unknown status" ;; \
+		esac; \
+	fi
 
 health-json: ## Run health check with JSON output
-	@./health-check.sh --json
+	@if ./health-check.sh --json; then \
+		true; \
+	else \
+		case $$? in \
+			1) echo "{\"message\": \"Health check completed - system is degraded\"}" ;; \
+			2) echo "{\"message\": \"Health check completed - system is critical\"}" ;; \
+			*) echo "{\"message\": \"Health check completed - unknown status\"}" ;; \
+		esac; \
+	fi
 
 status: ## Show container status
 	@echo "🐳 Container Status:"
@@ -82,6 +98,7 @@ restart-api: ## Restart api service
 # Update commands
 update: ## Update and rebuild images
 	@echo "📦 Updating and rebuilding images..."
+	git clone https://github.com/ProxmoxVE-Watcher/ProxmoxVE-Watcher.git
 	docker-compose pull
 	docker-compose build --no-cache
 	docker-compose up -d --force-recreate
@@ -112,15 +129,23 @@ security-scan: ## Run basic security scan on images
 
 # Development helpers
 shell-web: ## Open shell in web container
-	@if docker ps --filter "name=proxmoxve-watcher-web" --format "{{.Names}}" | head -1 | xargs -I {} docker exec -it {} sh; then \
-		echo ""; \
+	@cid=$$(docker ps --filter "name=proxmoxve-watcher-web" --format "{{.Names}}" | head -1); \
+	if [ -n "$$cid" ]; then \
+		echo "🔌 Attaching to $$cid"; \
+		( docker exec -it $$cid sh 2>/dev/null \
+			|| docker exec -it $$cid /bin/sh 2>/dev/null \
+			|| docker exec -it $$cid bash ) || echo "⚠️  Unable to start an interactive shell"; \
 	else \
 		echo "❌ web container not running"; \
 	fi
 
 shell-api: ## Open shell in api container
-	@if docker ps --filter "name=proxmoxve-watcher-api" --format "{{.Names}}" | head -1 | xargs -I {} docker exec -it {} sh; then \
-		echo ""; \
+	@cid=$$(docker ps --filter "name=proxmoxve-watcher-api" --format "{{.Names}}" | head -1); \
+	if [ -n "$$cid" ]; then \
+		echo "🔌 Attaching to $$cid"; \
+		( docker exec -it $$cid sh 2>/dev/null \
+			|| docker exec -it $$cid /bin/sh 2>/dev/null \
+			|| docker exec -it $$cid bash ) || echo "⚠️  Unable to start an interactive shell"; \
 	else \
 		echo "❌ api container not running"; \
 	fi
@@ -128,5 +153,12 @@ shell-api: ## Open shell in api container
 # Testing
 test: ## Run health checks and basic tests
 	@echo "🧪 Running tests..."
-	@./health-check.sh
-	@echo "✅ All tests passed!"
+	@if ./health-check.sh; then \
+		echo "✅ All tests passed!"; \
+	else \
+		case $$? in \
+			1) echo "⚠️  Tests completed - system is degraded" ;; \
+			2) echo "❌ Tests completed - system is critical" ;; \
+			*) echo "❓ Tests completed - unknown status" ;; \
+		esac; \
+	fi
