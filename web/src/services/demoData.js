@@ -331,9 +331,9 @@ export const demoSummary = {
 // Simulate realistic variations for auto-refresh
 export const generateVariations = () => {
   // Deep copy the demo data arrays to avoid mutating the originals
-  const nodes = structuredClone(demoNodes);
-  const vms = structuredClone(demoVMs);
-  const containers = structuredClone(demoContainers);
+  const nodes = JSON.parse(JSON.stringify(demoNodes));
+  const vms = JSON.parse(JSON.stringify(demoVMs));
+  const containers = JSON.parse(JSON.stringify(demoContainers));
 
   // Add small random variations to CPU usage and memory
   nodes.forEach(node => {
