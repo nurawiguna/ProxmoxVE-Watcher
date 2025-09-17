@@ -1,0 +1,68 @@
+# Git and version control
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+README.md
+LICENSE
+docs/
+.github/
+
+# Docker files
+docker-compose*.yml
+Dockerfile*
+.dockerignore
+
+# Build artifacts
+dist/
+build/
+node_modules/
+.npm
+.cache/
+
+# Environment and config files
+.env*
+*.log
+logs/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+
+# Node.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Backup files
+*.bak
+*.backup
+backups/
+
+# Test files
+test/
+tests/
+*.test.js
+*.spec.js
+
+# Scripts and utilities
+deploy.sh
+build-demo.sh
+health-check.sh
+Makefile
