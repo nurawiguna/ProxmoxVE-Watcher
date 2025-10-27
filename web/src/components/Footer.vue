@@ -109,7 +109,7 @@
       <div :class="['flex flex-col sm:flex-row items-center justify-between gap-3', isDemoMode ? 'pt-6 mt-8 border-t border-gray-200' : '']">
         <div class="text-xs text-gray-500 text-center sm:text-left leading-relaxed">
           <div class="mt-2">© {{ year }} {{ appTitle }}</div>
-          <div>Built with ❤️ vibe coding - using Vue 3, Vite, and Tailwind CSS.</div>
+          <div>Built with ❤️ and vibe coding – using Vue 3, Vite, and Tailwind CSS.</div>
         </div>
         <div class="flex items-center gap-4 text-xs text-gray-500">
           <span class="inline-flex items-center gap-1">
