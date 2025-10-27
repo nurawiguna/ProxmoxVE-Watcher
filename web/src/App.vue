@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="min-h-screen bg-gradient-to-br from-slate-100 to-blue-50">
+  <div id="app" class="min-h-screen bg-gradient-to-br from-slate-100 to-blue-50 flex flex-col">
     <!-- Demo mode indicator -->
     <div v-if="isDemoMode" class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 text-center">
       <div class="flex items-center justify-center">
@@ -17,7 +17,7 @@
     <Navigation />
     
     <!-- Main content -->
-    <main class="container mx-auto px-4 py-6 sm:px-6 lg:px-8">
+    <main class="container mx-auto px-4 py-6 sm:px-6 lg:px-8 flex-1 w-full">
       <router-view v-slot="{ Component }">
         <transition
           name="fade"
@@ -36,6 +36,9 @@
     
     <!-- Global notification system -->
     <NotificationSystem />
+
+    <!-- Footer -->
+    <Footer />
   </div>
 </template>
 
@@ -45,6 +48,7 @@ import { useProxmoxStore } from '@/stores/proxmox'
 import Navigation from '@/components/Navigation.vue'
 import LoadingOverlay from '@/components/LoadingOverlay.vue'
 import NotificationSystem from '@/components/NotificationSystem.vue'
+import Footer from '@/components/Footer.vue'
 
 const proxmoxStore = useProxmoxStore()
 
