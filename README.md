@@ -3,6 +3,46 @@
 A modern, responsive web dashboard for monitoring Proxmox Virtual Environment (VE) clusters. Built with Vue.js and featuring real-time data updates, detailed resource monitoring, and an intuitive user interface.
 
 
+<p align="center">
+   <img alt="last commit" src="https://img.shields.io/github/last-commit/nurawiguna/ProxmoxVE-Watcher?style=flat-square&logo=github">
+   <img alt="top language" src="https://img.shields.io/github/languages/top/nurawiguna/ProxmoxVE-Watcher?style=flat-square&logo=vue.js&label=vue">
+   <img alt="languages" src="https://img.shields.io/github/languages/count/nurawiguna/ProxmoxVE-Watcher?style=flat-square&label=languages">
+   <img alt="license" src="https://img.shields.io/github/license/nurawiguna/ProxmoxVE-Watcher?style=flat-square">
+  
+</p>
+
+<p align="center">
+   <img alt="Built with vibe coding" src="https://img.shields.io/badge/Built%20with-%E2%9D%A4%EF%B8%8F%20vibe%20coding-ff69b4?style=flat-square">
+</p>
+
+<p align="center"><em>Stack tools:</em></p>
+
+<p align="center">
+   <!-- row 1 -->
+   <img alt="Flask" src="https://img.shields.io/badge/Flask-000?style=flat-square&logo=flask&logoColor=white">
+   <img alt="JSON" src="https://img.shields.io/badge/JSON-000?style=flat-square&logo=json&logoColor=white">
+   <img alt="Markdown" src="https://img.shields.io/badge/Markdown-000?style=flat-square&logo=markdown&logoColor=white">
+   <img alt="npm" src="https://img.shields.io/badge/npm-CB3837?style=flat-square&logo=npm&logoColor=white">
+   <img alt="Autoprefixer" src="https://img.shields.io/badge/Autoprefixer-DD3735?style=flat-square&logo=autoprefixer&logoColor=white">
+   <img alt="PostCSS" src="https://img.shields.io/badge/PostCSS-DD3A0A?style=flat-square&logo=postcss&logoColor=white">
+   <img alt="TOML" src="https://img.shields.io/badge/TOML-9558B2?style=flat-square&logo=toml&logoColor=white">
+   <img alt="Prettier" src="https://img.shields.io/badge/Prettier-F7B93E?style=flat-square&logo=prettier&logoColor=000">
+</p>
+
+<p align="center">
+   <!-- row 2 -->
+   <img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=000">
+   <img alt="Vue.js" src="https://img.shields.io/badge/Vue.js-42b883?style=flat-square&logo=vue.js&logoColor=white">
+   <img alt="Vite" src="https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white">
+   <img alt="Docker" src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white">
+   <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white">
+   <img alt="ESLint" src="https://img.shields.io/badge/ESLint-4B32C3?style=flat-square&logo=eslint&logoColor=white">
+   <img alt="Axios" src="https://img.shields.io/badge/Axios-5A29E4?style=flat-square&logo=axios&logoColor=white">
+   <img alt="GNU Bash" src="https://img.shields.io/badge/GNU%20Bash-4EAA25?style=flat-square&logo=gnubash&logoColor=white">
+   <img alt="Gunicorn" src="https://img.shields.io/badge/Gunicorn-499848?style=flat-square&logo=gunicorn&logoColor=white">
+</p>
+
+
 ## ✨ Features
 
 - **Real-time Monitoring**: Live updates of VMs, containers, and node status
